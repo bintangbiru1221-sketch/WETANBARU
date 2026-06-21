@@ -1114,12 +1114,17 @@ async function loadProfile(){
 
   if(!user) return;
 
-  const { data:profile, error } =
-    await sb
-      .from('profiles')
-      .select('*')
-      .eq('id', user.id)
-      .single();
+  const { data, error } =
+  await sb
+    .from('profiles')
+    .select('*')
+    .eq('id', user.id);
+
+console.log("PROFILE QUERY", {
+  userId:user.id,
+  data,
+  error
+});
 
   if(error){
     console.error(error);

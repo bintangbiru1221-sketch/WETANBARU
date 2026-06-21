@@ -419,6 +419,32 @@ select.inp{cursor:pointer;-webkit-appearance:none;appearance:none}
 @keyframes tout{to{opacity:0;transform:translateY(-4px)}}
 .toast-t{font-size:12px;color:var(--text);font-weight:400}
 
+/* ── BANK SELECTOR ── */
+.bank-grid{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.bank-btn{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 16px;border-radius:14px;
+  border:1px solid var(--glass-b);background:var(--glass);
+  cursor:pointer;transition:border-color .18s,background .18s;
+  font-family:inherit;text-align:left;width:100%;
+}
+.bank-btn:hover{border-color:var(--text);background:var(--glass-h)}
+.bank-btn.coming{opacity:.45;cursor:not-allowed}
+.bank-icon{
+  width:38px;height:38px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;font-weight:600;flex-shrink:0;
+  letter-spacing:-.5px;
+}
+.bank-bca  .bank-icon{background:#0050a0;color:#fff}
+.bank-mandiri .bank-icon{background:#003580;color:#f9a800}
+.bank-other .bank-icon{background:rgba(0,0,0,0.06);color:var(--t3)}
+[data-theme="dark"] .bank-other .bank-icon{background:rgba(255,255,255,0.06)}
+.bank-info{flex:1}
+.bank-name{font-size:13px;font-weight:500;color:var(--text)}
+.bank-sub{font-size:11px;color:var(--t2);margin-top:2px}
+.bank-arrow{font-size:14px;color:var(--t3)}
+
 /* scrollbar */
 ::-webkit-scrollbar{width:0}
 @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
@@ -445,6 +471,13 @@ select.inp{cursor:pointer;-webkit-appearance:none;appearance:none}
     <div class="popup-title">Berhasil dikirim</div>
     <div class="popup-sub" id="popupSub"></div>
     <div class="popup-names" id="popupNames"></div>
+    <div style="background:rgba(26,26,255,0.06);border-radius:12px;padding:12px 14px;margin-bottom:16px;display:flex;align-items:flex-start;gap:10px">
+      <span style="font-size:16px;line-height:1">📬</span>
+      <div>
+        <div style="font-size:12px;font-weight:500;color:var(--acc);margin-bottom:2px">Cek email Anda</div>
+        <div style="font-size:11px;color:var(--t2);font-weight:300;line-height:1.6">Periksa kotak masuk atau folder Spam untuk melihat email yang telah terkirim kepada setiap penerima.</div>
+      </div>
+    </div>
     <button class="btn btn-dark" onclick="closeOverlay('overlaySuccess')">Tutup</button>
   </div>
 </div>
@@ -479,6 +512,48 @@ select.inp{cursor:pointer;-webkit-appearance:none;appearance:none}
       <button class="btn btn-ghost" style="flex:1" onclick="closeOverlay('overlayEdit')">Batal</button>
       <button class="btn btn-dark" style="flex:2" onclick="saveProfile()">Simpan</button>
     </div>
+  </div>
+</div>
+
+<!-- BELI PAKET POPUP -->
+<div class="overlay" id="overlayBayar">
+  <div class="popup">
+    <div class="popup-title">Pilih Metode Pembayaran</div>
+    <div class="popup-sub">Selesaikan pembayaran sesuai bank pilihan Anda</div>
+    <div class="bank-grid">
+
+      <!-- BCA -->
+      <button class="bank-btn bank-bca" onclick="pilihBank('BCA')">
+        <div class="bank-icon">BCA</div>
+        <div class="bank-info">
+          <div class="bank-name">BCA Transfer</div>
+          <div class="bank-sub">Virtual Account &middot; Konfirmasi otomatis</div>
+        </div>
+        <span class="bank-arrow">›</span>
+      </button>
+
+      <!-- Mandiri -->
+      <button class="bank-btn bank-mandiri" onclick="pilihBank('Mandiri')">
+        <div class="bank-icon">MDR</div>
+        <div class="bank-info">
+          <div class="bank-name">Bank Mandiri</div>
+          <div class="bank-sub">Virtual Account &middot; Konfirmasi otomatis</div>
+        </div>
+        <span class="bank-arrow">›</span>
+      </button>
+
+      <!-- Bank Lain -->
+      <button class="bank-btn bank-other coming" disabled>
+        <div class="bank-icon">🏦</div>
+        <div class="bank-info">
+          <div class="bank-name">Bank Lain</div>
+          <div class="bank-sub">Coming soon — segera hadir</div>
+        </div>
+        <span class="bank-arrow" style="font-size:11px;color:var(--t3)">Soon</span>
+      </button>
+
+    </div>
+    <button class="btn btn-ghost" style="width:100%" onclick="closeOverlay('overlayBayar')">Batal</button>
   </div>
 </div>
 
@@ -710,6 +785,11 @@ select.inp{cursor:pointer;-webkit-appearance:none;appearance:none}
     </div>
   </div>
 
+  <!-- TOMBOL BELI -->
+  <button class="btn btn-dark" onclick="openOverlay('overlayBayar')" style="margin-top:4px">
+    🛒 Beli Paket Wetan
+  </button>
+
   <div>
     <div class="slbl">Riwayat transaksi</div>
     <div class="g card">
@@ -939,6 +1019,12 @@ function selSpeed(btn,plan,val){
   toast('Interval '+val+' menit dipilih untuk paket tersebut');
 }
 
+// ── BANK SELECTOR ──
+function pilihBank(bank){
+  closeOverlay('overlayBayar');
+  toast('Mengarahkan ke pembayaran '+bank+'…');
+}
+
 // ── PROFILE SAVE ──
 async function saveProfile(){
   const nama=document.getElementById('editNama').value.trim()||'Pengguna';
@@ -1048,46 +1134,63 @@ async function saveProfile(){
     if(editEmail) editEmail.value = email;
   }
 
-async function loadProfile(){
+  // ── LOAD PROFILE ──
+  // Mengambil data profil dari tabel 'profiles' Supabase,
+  // termasuk userPlan dan userQuota untuk ditampilkan secara dinamis.
+  async function loadProfile(){
+    const { data:{ user } } = await sb.auth.getUser();
+    if(!user) return;
 
-  const { data:{user} } = await sb.auth.getUser();
+    const { data, error } = await sb
+      .from('profiles')
+      .select('*')
+      .eq('id', user.id);
 
-  console.log("AUTH USER", user);
+    if(error){ console.error('PROFILE ERROR', error); return; }
+    if(!data || !data.length){ console.warn('PROFILE NOT FOUND untuk id:', user.id); return; }
 
-  const { data, error } = await sb
-    .from('profiles')
-    .select('*')
-    .eq('id', user.id);
+    const profile = data[0];
+    console.log('PROFILE', profile);
 
-  console.log("PROFILE RESULT", {
-    userId: user.id,
-    data,
-    error
-  });
+    // Nama & email
+    const set = (id, val) => { const el=document.getElementById(id); if(el && val) el.textContent=val; };
+    set('mainName',   profile.nama  || profile.full_name);
+    set('mainEmail',  profile.email);
+    set('greetName', (profile.nama  || profile.full_name || '').split(' ')[0]);
 
-  if(error){
-    console.error("PROFILE ERROR", error);
-    return;
-  }
-
-  if(!data || !data.length){
-    console.error("PROFILE NOT FOUND");
-    return;
-  }
-
-  const profile = data[0];
-
-  console.log("PROFILE", profile);
-}
-
-
-  // Logout sesungguhnya, dipanggil dari tombol "Keluar" di Setelan
-  window.doLogout = async function(){
-    try{
-      await sb.auth.signOut();
-    }catch(err){
-      console.error("❌ Gagal logout:", err);
+    // userPlan — nama paket aktif (mis. "WETAN BERISIK")
+    const userPlan = profile.plan || profile.user_plan || null;
+    if(userPlan){
+      const planEl = document.querySelector('#v-set .pill-blue');
+      if(planEl) planEl.textContent = userPlan;
+      const planRowEl = document.querySelector('#v-set .srow-s');
+      if(planRowEl) planRowEl.textContent = userPlan + ' · Aktif';
     }
+
+    // userQuota — sisa kuota harian
+    const userQuota     = profile.quota_used  ?? profile.user_quota  ?? null;
+    const userQuotaMax  = profile.quota_limit ?? profile.quota_max   ?? null;
+    if(userQuota !== null && userQuotaMax !== null){
+      const used    = parseInt(userQuota,10);
+      const max     = parseInt(userQuotaMax,10);
+      const sisa    = max - used;
+      const pct     = max > 0 ? Math.round(used/max*100) : 0;
+
+      const qLabelEl = document.querySelector('.qbar-bg ~ span');
+      if(qLabelEl) qLabelEl.textContent = sisa.toLocaleString('id-ID') + ' email tersisa';
+
+      const qRightEl = document.querySelector('.info-card span[style*="color:var(--t2)"] + span');
+      if(qRightEl) qRightEl.textContent = used.toLocaleString('id-ID')+' / '+max.toLocaleString('id-ID');
+
+      const qbar = document.getElementById('qbar');
+      if(qbar) setTimeout(()=>{ qbar.style.width = pct+'%'; }, 700);
+    }
+  }
+
+  // ── LOGOUT ──
+  window.doLogout = async function(){
+    try{ await sb.auth.signOut(); }
+    catch(err){ console.error('❌ Gagal logout:', err); }
     window.location.href = LOGIN_PAGE;
   };
 
@@ -1100,54 +1203,6 @@ async function loadProfile(){
     if(event === 'SIGNED_OUT' || !session){
       window.location.href = LOGIN_PAGE;
     }
-
-  async function loadProfile(){
-
-  const { data:{user} } =
-    await sb.auth.getUser();
-
-  if(!user) return;
-
-  const { data, error } =
-  await sb
-    .from('profiles')
-    .select('*')
-    .eq('id', user.id);
-
-console.log("PROFILE QUERY", {
-  userId:user.id,
-  data,
-  error
-});
-
-  if(error){
-    console.error(error);
-    return;
-  }
-
-  // Nama
-  const mainName=document.getElementById('mainName');
-  if(mainName){
-    mainName.textContent=profile.nama;
-  }
-
-  // Email
-  const mainEmail=document.getElementById('mainEmail');
-  if(mainEmail){
-    mainEmail.textContent=profile.email;
-  }
-
-  // Sapaan
-  const greetName=document.getElementById('greetName');
-  if(greetName){
-    greetName.textContent=
-      profile.nama.split(' ')[0];
-  }
-
-  console.log("PROFILE",profile);
-}
-
-
   });
 
 })();

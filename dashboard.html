@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<title>WETAN MPTB</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#eef0f3;
+  --glass:rgba(255,255,255,0.55);
+  --glass-b:rgba(255,255,255,0.80);
+  --glass-h:rgba(255,255,255,0.72);
+  --text:#1a1a1a;
+  --t2:#6a6a6a;
+  --t3:#b0b0b0;
+  --acc:#1a1aff;
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+[data-theme="dark"]{
+  --bg:#0f1012;
+  --glass:rgba(255,255,255,0.045);
+  --glass-b:rgba(255,255,255,0.09);
+  --glass-h:rgba(255,255,255,0.075);
+  --text:#f0f0f0;
+  --t2:#808080;
+  --t3:#404040;
+  --acc:#4d7cff;
+}
+html{font-size:16px}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--bg);color:var(--text);
+  min-height:100dvh;overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  transition:background .35s,color .35s;
+}
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity:.5;
+}
+#app{position:relative;z-index:1;min-height:100dvh;display:flex;flex-direction:column}
+
+/* ── iOS LOADING SCREEN ── */
+#loadscreen{
+  position:fixed;inset:0;z-index:9999;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;
+  background:var(--bg);
+  transition:opacity .5s ease,transform .5s ease;
+}
+#loadscreen.hide{opacity:0;transform:scale(1.04);pointer-events:none}
+.load-logo{
+  width:72px;height:72px;border-radius:20px;
+  background:var(--text);
+  display:flex;align-items:center;justify-content:center;
+  animation:logoPulse 1.2s ease-in-out infinite alternate;
+}
+.load-logo span{font-size:30px;font-weight:300;color:var(--bg);letter-spacing:-1px}
+@keyframes logoPulse{from{transform:scale(1);opacity:.9}to{transform:scale(1.04);opacity:1}}
+.ios-spinner{
+  width:28px;height:28px;position:relative;
+}
+.ios-spinner span{
+  position:absolute;left:50%;top:50%;
+  width:2.5px;height:8px;border-radius:2px;
+  background:var(--text);
+  transform-origin:50% 14px;
+  animation:iosSpin 1s linear infinite;
+  opacity:0;
+}
+.ios-spinner span:nth-child(1) {transform:rotate(0deg)   translateX(-50%) translateY(-14px);animation-delay:0s}
+.ios-spinner span:nth-child(2) {transform:rotate(30deg)  translateX(-50%) translateY(-14px);animation-delay:-.917s}
+.ios-spinner span:nth-child(3) {transform:rotate(60deg)  translateX(-50%) translateY(-14px);animation-delay:-.833s}
+.ios-spinner span:nth-child(4) {transform:rotate(90deg)  translateX(-50%) translateY(-14px);animation-delay:-.75s}
+.ios-spinner span:nth-child(5) {transform:rotate(120deg) translateX(-50%) translateY(-14px);animation-delay:-.667s}
+.ios-spinner span:nth-child(6) {transform:rotate(150deg) translateX(-50%) translateY(-14px);animation-delay:-.583s}
+.ios-spinner span:nth-child(7) {transform:rotate(180deg) translateX(-50%) translateY(-14px);animation-delay:-.5s}
+.ios-spinner span:nth-child(8) {transform:rotate(210deg) translateX(-50%) translateY(-14px);animation-delay:-.417s}
+.ios-spinner span:nth-child(9) {transform:rotate(240deg) translateX(-50%) translateY(-14px);animation-delay:-.333s}
+.ios-spinner span:nth-child(10){transform:rotate(270deg) translateX(-50%) translateY(-14px);animation-delay:-.25s}
+.ios-spinner span:nth-child(11){transform:rotate(300deg) translateX(-50%) translateY(-14px);animation-delay:-.167s}
+.ios-spinner span:nth-child(12){transform:rotate(330deg) translateX(-50%) translateY(-14px);animation-delay:-.083s}
+@keyframes iosSpin{0%{opacity:1}100%{opacity:.08}}
+
+/* ── VIEWS ── */
+.view{display:none;flex:1;flex-direction:column;animation:rise .3s cubic-bezier(.16,1,.3,1) both}
+.view.active{display:flex}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* ── GLASS MIXIN ── */
+.g{
+  background:var(--glass);
+  backdrop-filter:blur(28px) saturate(160%);
+  -webkit-backdrop-filter:blur(28px) saturate(160%);
+  border:1px solid var(--glass-b);border-radius:18px;
+}
+
+/* ── HEADER ── */
+.hdr{
+  position:sticky;top:0;z-index:50;height:52px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 20px;
+  background:var(--glass);
+  backdrop-filter:blur(32px) saturate(180%);
+  -webkit-backdrop-filter:blur(32px) saturate(180%);
+  border-bottom:1px solid var(--glass-b);
+}
+.hdr-name{font-size:14px;font-weight:500;color:var(--text);letter-spacing:-.1px}
+.hbtn{
+  padding:6px 12px;border-radius:10px;background:transparent;border:none;
+  font-family:inherit;font-size:12px;font-weight:400;color:var(--t2);
+  cursor:pointer;transition:background .15s,color .15s;
+}
+.hbtn:hover{background:var(--glass-h);color:var(--text)}
+
+/* ── SCROLL ── */
+.pg{
+  flex:1;overflow-y:auto;
+  padding:16px 16px calc(96px + var(--safe-b));
+  display:flex;flex-direction:column;gap:12px;
+}
+@media(min-width:600px){.pg{padding:20px 20px calc(104px + var(--safe-b));max-width:560px;margin:0 auto;width:100%}}
+
+.slbl{font-size:11px;font-weight:500;color:var(--t3);letter-spacing:.06em;text-transform:uppercase;padding:0 4px;margin-bottom:6px;margin-top:4px}
+
+/* ── CARD ROW ── */
+.card{overflow:hidden}
+.cr{
+  display:flex;align-items:center;padding:14px 18px;
+  border-bottom:1px solid rgba(0,0,0,0.04);gap:10px;
+  transition:background .12s;cursor:default;
+}
+[data-theme="dark"] .cr{border-bottom-color:rgba(255,255,255,0.04)}
+.cr:last-child{border-bottom:none}
+.cr:hover{background:var(--glass-h)}
+.cr-main{flex:1;min-width:0}
+.cr-t{font-size:13px;font-weight:400;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cr-s{font-size:11px;color:var(--t2);margin-top:2px}
+.cr-r{font-size:12px;color:var(--t2);flex-shrink:0;text-align:right}
+.cr-r small{display:block;font-size:10px;color:var(--t3);margin-top:1px}
+.info-card{padding:18px 20px}
+
+/* ── PAGE TITLE ── */
+.pt{font-size:22px;font-weight:300;color:var(--text);letter-spacing:-.4px;line-height:1.2}
+.pt span{font-weight:500}
+.ps{font-size:12px;color:var(--t2);margin-top:3px;font-weight:300;line-height:1.5}
+
+/* ── STATS ── */
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.scard{padding:16px 18px;display:flex;flex-direction:column;gap:4px}
+.sv{font-size:28px;font-weight:300;color:var(--text);letter-spacing:-.6px;line-height:1}
+.sl{font-size:11px;color:var(--t2);font-weight:400;line-height:1.4}
+
+/* ── QUOTA ── */
+.qbar-bg{height:3px;background:rgba(0,0,0,0.08);border-radius:2px;overflow:hidden;margin:10px 0 6px}
+[data-theme="dark"] .qbar-bg{background:rgba(255,255,255,0.08)}
+.qbar{height:100%;background:var(--text);border-radius:2px;transition:width .8s cubic-bezier(.16,1,.3,1)}
+
+/* ── PILLS ── */
+.pill{display:inline-block;font-size:10px;font-weight:500;padding:2px 8px;border-radius:20px}
+.pill-ok{background:rgba(0,0,0,0.06);color:var(--t2)}
+[data-theme="dark"] .pill-ok{background:rgba(255,255,255,0.08);color:var(--t2)}
+.pill-blue{background:rgba(26,26,255,0.08);color:var(--acc)}
+[data-theme="dark"] .pill-blue{background:rgba(77,124,255,0.12);color:var(--acc)}
+.pill-dim{background:rgba(0,0,0,0.04);color:var(--t3)}
+[data-theme="dark"] .pill-dim{background:rgba(255,255,255,0.05);color:var(--t3)}
+
+/* ── INPUTS ── */
+.finp{display:flex;flex-direction:column;gap:5px}
+.flbl{font-size:10px;font-weight:500;color:var(--t3);letter-spacing:.06em;text-transform:uppercase}
+.inp{
+  background:transparent;border:none;border-bottom:1px solid rgba(0,0,0,0.12);
+  padding:8px 0;font-size:14px;font-weight:300;font-family:inherit;
+  color:var(--text);outline:none;width:100%;transition:border-color .15s;
+}
+[data-theme="dark"] .inp{border-bottom-color:rgba(255,255,255,0.1)}
+.inp:focus{border-bottom-color:var(--text)}
+.inp::placeholder{color:var(--t3)}
+textarea.inp{resize:none;height:130px;line-height:1.7;padding-top:8px}
+select.inp{cursor:pointer;-webkit-appearance:none;appearance:none}
+.compose{padding:20px;display:flex;flex-direction:column;gap:18px}
+
+/* ── CHIPS ── */
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{
+  font-size:11px;font-weight:400;padding:5px 12px;border-radius:20px;
+  border:1px solid var(--glass-b);background:transparent;color:var(--t2);
+  cursor:pointer;transition:all .15s;font-family:inherit;
+}
+.chip.on{background:var(--text);color:var(--bg);border-color:var(--text)}
+
+/* ── BUTTONS ── */
+.btn{
+  padding:13px 20px;border-radius:14px;font-family:inherit;
+  font-size:13px;font-weight:500;cursor:pointer;border:none;
+  transition:opacity .15s,transform .1s;
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+}
+.btn:active{transform:scale(.98)}
+.btn-dark{background:var(--text);color:var(--bg);width:100%}
+.btn-dark:hover{opacity:.85}
+.btn-ghost{background:transparent;border:1px solid var(--glass-b);color:var(--t2);padding:8px 14px;font-size:12px}
+.btn-ghost:hover{background:var(--glass-h);color:var(--text)}
+
+/* ── DROP ZONE ── */
+.drop{
+  border:1px dashed rgba(0,0,0,0.15);border-radius:18px;
+  padding:36px 20px;text-align:center;cursor:pointer;
+  background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  transition:border-color .15s,background .15s;
+}
+[data-theme="dark"] .drop{border-color:rgba(255,255,255,0.1)}
+.drop:hover,.drop.over{border-color:var(--text);background:var(--glass-h)}
+.drop-t{font-size:14px;font-weight:300;color:var(--text);margin-bottom:4px}
+.drop-s{font-size:11px;color:var(--t3);line-height:1.6}
+
+/* ── PLAN GRID ── */
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(min-width:480px){.pgrid{grid-template-columns:repeat(2,1fr)}}
+.plan{
+  padding:16px;border-radius:16px;border:1px solid var(--glass-b);
+  background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  cursor:pointer;transition:border-color .2s,background .2s,transform .2s;position:relative;
+}
+.plan:hover{transform:translateY(-1px)}
+.plan.on{border-color:var(--text);background:var(--glass-h)}
+.plan-n{font-size:12px;font-weight:600;color:var(--text);margin-bottom:1px;letter-spacing:.01em}
+.plan-price{font-size:19px;font-weight:300;color:var(--text);letter-spacing:-.4px;margin:3px 0}
+.plan-dur{font-size:10px;color:var(--t3);margin-bottom:8px}
+.plan-fs{display:flex;flex-direction:column;gap:3px}
+.plan-f{font-size:10px;color:var(--t2);line-height:1.5}
+.plan-tag{
+  position:absolute;top:9px;right:9px;
+  font-size:9px;font-weight:500;color:var(--bg);
+  background:var(--text);padding:2px 6px;border-radius:4px;letter-spacing:.04em;
+}
+/* speed selector inside plan */
+.speed-row{display:flex;gap:4px;flex-wrap:wrap;margin-top:8px}
+.speed-btn{
+  font-size:9px;font-weight:400;padding:3px 7px;border-radius:6px;
+  border:1px solid rgba(0,0,0,0.1);background:transparent;color:var(--t2);
+  cursor:pointer;transition:all .15s;font-family:inherit;
+}
+[data-theme="dark"] .speed-btn{border-color:rgba(255,255,255,0.1)}
+.speed-btn.on{background:var(--text);color:var(--bg);border-color:var(--text)}
+
+/* ── SETTINGS ── */
+.sgrp{border-radius:18px;overflow:hidden;border:1px solid var(--glass-b);background:var(--glass);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px)}
+.srow{
+  display:flex;align-items:center;padding:13px 18px;
+  border-bottom:1px solid rgba(0,0,0,0.04);cursor:pointer;transition:background .12s;gap:10px;
+}
+[data-theme="dark"] .srow{border-bottom-color:rgba(255,255,255,0.04)}
+.srow:last-child{border-bottom:none}
+.srow:hover{background:var(--glass-h)}
+.srow-body{flex:1}
+.srow-t{font-size:13px;font-weight:400;color:var(--text)}
+.srow-s{font-size:11px;color:var(--t2);margin-top:1px}
+.srow-r{font-size:12px;color:var(--t3)}
+.srow.red .srow-t{color:#c0392b}
+[data-theme="dark"] .srow.red .srow-t{color:#e05050}
+
+/* ── TOGGLE ── */
+.tog{width:38px;height:22px;border-radius:11px;background:var(--t3);position:relative;cursor:pointer;transition:background .2s;flex-shrink:0}
+.tog.on{background:var(--text)}
+.tok-k{position:absolute;top:3px;left:3px;width:16px;height:16px;background:white;border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .22s cubic-bezier(.34,1.56,.64,1)}
+[data-theme="dark"] .tok-k{background:#222}
+.tog.on .tok-k{transform:translateX(16px)}
+
+/* ── PROFILE BLOCK ── */
+.pblock{padding:20px;display:flex;align-items:center;gap:14px}
+.av{
+  width:52px;height:52px;border-radius:50%;
+  background:rgba(0,0,0,0.06);
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;font-weight:300;color:var(--t2);flex-shrink:0;
+  transition:background .3s;
+}
+[data-theme="dark"] .av{background:rgba(255,255,255,0.07)}
+
+/* ── DYNAMIC ISLAND ── */
+.di-wrap{
+  position:fixed;
+  bottom:calc(16px + var(--safe-b));
+  left:50%;transform:translateX(-50%);
+  z-index:200;
+  width:calc(100% - 32px);
+  max-width:480px;
+  display:flex;justify-content:center;
+  pointer-events:none;
+}
+.di{
+  pointer-events:auto;
+  display:flex;align-items:center;
+  background:rgba(12,12,14,0.82);
+  backdrop-filter:blur(40px) saturate(200%);
+  -webkit-backdrop-filter:blur(40px) saturate(200%);
+  border:1px solid rgba(255,255,255,0.11);
+  border-radius:40px;
+  padding:7px 8px;
+  gap:0;
+  box-shadow:
+    0 12px 40px rgba(0,0,0,0.32),
+    0 4px 12px rgba(0,0,0,0.18),
+    inset 0 1px 0 rgba(255,255,255,0.07);
+  width:100%;
+  justify-content:space-between;
+  transition:all .4s cubic-bezier(.16,1,.3,1);
+}
+/* glass tint on light mode */
+[data-theme="light"] .di{
+  background:rgba(22,22,26,0.80);
+}
+.di-item{
+  flex:1;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:7px 6px 6px;
+  border-radius:32px;
+  cursor:pointer;
+  transition:background .25s cubic-bezier(.16,1,.3,1),transform .2s;
+  user-select:none;
+  gap:3px;
+  min-width:0;
+  position:relative;
+}
+.di-item:active{transform:scale(.92)}
+.di-item.on{background:rgba(255,255,255,0.13)}
+.di-dot{
+  width:3.5px;height:3.5px;border-radius:50%;
+  background:rgba(255,255,255,0.22);
+  transition:background .25s,transform .3s cubic-bezier(.34,1.56,.64,1);
+  flex-shrink:0;
+}
+.di-item.on .di-dot{
+  background:rgba(255,255,255,0.9);
+  transform:scale(1.5);
+}
+.di-lbl{
+  font-size:10px;font-weight:400;
+  color:rgba(255,255,255,0.32);
+  transition:color .2s;
+  white-space:nowrap;
+  letter-spacing:.01em;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  max-width:100%;
+  text-align:center;
+}
+.di-item.on .di-lbl{color:rgba(255,255,255,0.88)}
+.di-sep{
+  width:1px;height:24px;
+  background:rgba(255,255,255,0.07);
+  flex-shrink:0;margin:0 2px;
+  align-self:center;
+}
+
+/* ── OVERLAY / POPUP (glass) ── */
+.overlay{
+  position:fixed;inset:0;z-index:500;
+  background:rgba(0,0,0,0.3);
+  backdrop-filter:blur(12px) saturate(160%);
+  -webkit-backdrop-filter:blur(12px) saturate(160%);
+  display:flex;align-items:center;justify-content:center;
+  padding:24px;
+  opacity:0;pointer-events:none;
+  transition:opacity .28s;
+}
+.overlay.show{opacity:1;pointer-events:auto}
+.popup{
+  width:100%;max-width:360px;
+  background:var(--glass);
+  backdrop-filter:blur(48px) saturate(200%);
+  -webkit-backdrop-filter:blur(48px) saturate(200%);
+  border:1px solid var(--glass-b);border-radius:26px;
+  padding:28px 24px;
+  transform:translateY(18px) scale(.96);
+  transition:transform .32s cubic-bezier(.16,1,.3,1);
+  box-shadow:0 16px 48px rgba(0,0,0,0.14),0 4px 12px rgba(0,0,0,0.08);
+}
+.overlay.show .popup{transform:none}
+.popup-title{font-size:17px;font-weight:500;color:var(--text);margin-bottom:4px;letter-spacing:-.2px}
+.popup-sub{font-size:12px;color:var(--t2);font-weight:300;line-height:1.6;margin-bottom:20px}
+.popup-names{
+  max-height:160px;overflow-y:auto;
+  background:rgba(0,0,0,0.03);border-radius:12px;
+  padding:10px 14px;margin-bottom:20px;
+  display:flex;flex-direction:column;gap:5px;
+}
+[data-theme="dark"] .popup-names{background:rgba(255,255,255,0.03)}
+.popup-name{font-size:12px;color:var(--t2);font-weight:300}
+.popup-name strong{color:var(--text);font-weight:400}
+
+/* edit profile popup fields */
+.edit-fields{display:flex;flex-direction:column;gap:16px;margin-bottom:20px}
+.edit-av-row{display:flex;align-items:center;gap:14px;margin-bottom:4px}
+.edit-av{
+  width:60px;height:60px;border-radius:50%;
+  background:rgba(0,0,0,0.06);
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;font-weight:300;color:var(--t2);flex-shrink:0;
+  transition:background .3s;
+}
+[data-theme="dark"] .edit-av{background:rgba(255,255,255,0.07)}
+.edit-av-btn{font-size:11px;color:var(--acc);cursor:pointer;font-weight:400}
+
+/* ── TOAST ── */
+.tw{position:fixed;top:62px;left:50%;transform:translateX(-50%);z-index:999;width:calc(100% - 32px);max-width:340px;display:flex;flex-direction:column;gap:6px;pointer-events:none}
+.toast{
+  background:var(--glass);backdrop-filter:blur(32px);-webkit-backdrop-filter:blur(32px);
+  border:1px solid var(--glass-b);border-radius:12px;
+  padding:10px 14px;animation:tin .25s cubic-bezier(.16,1,.3,1) both;pointer-events:auto;
+}
+.toast.out{animation:tout .2s ease-in forwards}
+@keyframes tin{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+@keyframes tout{to{opacity:0;transform:translateY(-4px)}}
+.toast-t{font-size:12px;color:var(--text);font-weight:400}
+
+/* scrollbar */
+::-webkit-scrollbar{width:0}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+
+<!-- iOS LOADING SCREEN -->
+<div id="loadscreen">
+  <div class="load-logo"><span>W</span></div>
+  <div class="ios-spinner">
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="tw" id="TC"></div>
+
+<!-- SUCCESS POPUP -->
+<div class="overlay" id="overlaySuccess">
+  <div class="popup">
+    <div class="popup-title">Berhasil dikirim</div>
+    <div class="popup-sub" id="popupSub"></div>
+    <div class="popup-names" id="popupNames"></div>
+    <button class="btn btn-dark" onclick="closeOverlay('overlaySuccess')">Tutup</button>
+  </div>
+</div>
+
+<!-- EDIT PROFILE POPUP -->
+<div class="overlay" id="overlayEdit">
+  <div class="popup">
+    <div class="popup-title">Edit Profil</div>
+    <div class="popup-sub">Perbarui informasi akun Anda</div>
+    <div class="edit-fields">
+      <div class="edit-av-row">
+        <div class="edit-av" id="editAvPreview">B</div>
+        <div>
+          <div style="font-size:13px;font-weight:400;color:var(--text)">Budi Santoso</div>
+          <div class="edit-av-btn" onclick="toast('Ganti foto belum tersedia')">Ganti foto</div>
+        </div>
+      </div>
+      <div class="finp">
+        <label class="flbl">Nama lengkap</label>
+        <input type="text" class="inp" id="editNama" value="Budi Santoso" placeholder="Nama lengkap"/>
+      </div>
+      <div class="finp">
+        <label class="flbl">Email</label>
+        <input type="email" class="inp" id="editEmail" value="budi.santoso@email.com" placeholder="Alamat email"/>
+      </div>
+      <div class="finp">
+        <label class="flbl">Nomor WhatsApp</label>
+        <input type="tel" class="inp" id="editWa" placeholder="08xx-xxxx-xxxx"/>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost" style="flex:1" onclick="closeOverlay('overlayEdit')">Batal</button>
+      <button class="btn btn-dark" style="flex:2" onclick="saveProfile()">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<div id="app">
+
+<!-- HEADER -->
+<header class="hdr">
+  <span class="hdr-name">WETAN MPTB</span>
+  <div style="display:flex;align-items:center;gap:4px">
+    <button class="hbtn" onclick="toggleTheme()" id="tbtn">Gelap</button>
+    <button class="hbtn" onclick="toast('Tidak ada notifikasi baru')">Notifikasi</button>
+  </div>
+</header>
+
+<!-- ── BERANDA ── -->
+<section class="view active" id="v-dash">
+<div class="pg">
+  <div style="padding:4px 2px 8px">
+    <div class="pt">Selamat datang, <span id="greetName">Budi</span></div>
+    <div class="ps">Paket Pro &middot; Aktif hingga 31 Des 2025</div>
+  </div>
+  <div class="sgrid">
+    <div class="g scard"><div class="sv">1.284</div><div class="sl">Email terkirim<br>bulan ini</div></div>
+    <div class="g scard"><div class="sv">96%</div><div class="sl">Tingkat<br>keberhasilan</div></div>
+    <div class="g scard"><div class="sv">23</div><div class="sl">Total<br>broadcast</div></div>
+    <div class="g scard"><div class="sv">7</div><div class="sl">File<br>terupload</div></div>
+  </div>
+  <div class="g info-card">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px">
+      <span style="font-size:12px;color:var(--t2)">Kuota harian</span>
+      <span style="font-size:12px;color:var(--t2)">1.284 / 2.000</span>
+    </div>
+    <div class="qbar-bg"><div class="qbar" id="qbar" style="width:0%"></div></div>
+    <span style="font-size:11px;color:var(--t3)">716 email tersisa</span>
+  </div>
+</div>
+</section>
+
+<!-- ── UPLOAD ── -->
+<section class="view" id="v-upload">
+<div class="pg">
+  <div style="padding:4px 2px 8px">
+    <div class="pt">Upload <span>Data</span></div>
+    <div class="ps">Import daftar kontak dan template pesan</div>
+  </div>
+
+  <!-- Tab switch -->
+  <div style="display:flex;gap:0;background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--glass-b);border-radius:14px;padding:4px">
+    <button class="tab-btn" id="tab-kontak" onclick="switchTab('kontak')" style="flex:1;padding:8px;border-radius:10px;border:none;font-family:inherit;font-size:12px;font-weight:400;cursor:pointer;transition:all .2s;background:var(--text);color:var(--bg)">Daftar Kontak</button>
+    <button class="tab-btn" id="tab-template" onclick="switchTab('template')" style="flex:1;padding:8px;border-radius:10px;border:none;font-family:inherit;font-size:12px;font-weight:400;cursor:pointer;transition:all .2s;background:transparent;color:var(--t2)">Template Pesan</button>
+  </div>
+
+  <!-- Panel Kontak -->
+  <div id="panel-kontak">
+    <div class="drop" id="dz"
+      onclick="document.getElementById('fi').click()"
+      ondragover="event.preventDefault();this.classList.add('over')"
+      ondragleave="this.classList.remove('over')"
+      ondrop="onDrop(event,'kontak')">
+      <input type="file" id="fi" accept=".csv,.xlsx,.xls" hidden onchange="onFile(event,'kontak')"/>
+      <div class="drop-t">Pilih atau seret file daftar kontak</div>
+      <div class="drop-s">CSV, XLSX, XLS &nbsp;&middot;&nbsp; Maks 200 MB<br>Pastikan ada kolom <em>nama</em> dan <em>email</em></div>
+    </div>
+    <div style="margin-top:12px">
+      <div class="slbl">Riwayat upload kontak</div>
+      <div class="g card">
+        <div class="cr"><div class="cr-main"><div class="cr-t">data-pelanggan-mei.xlsx</div><div class="cr-s">5 Jun 2025 &middot; 18.4 KB</div></div><div class="cr-r">1.240 baris<small>Excel</small></div></div>
+        <div class="cr"><div class="cr-main"><div class="cr-t">email-blast-april.csv</div><div class="cr-s">28 Apr 2025 &middot; 8.1 KB</div></div><div class="cr-r">640 baris<small>CSV</small></div></div>
+        <div class="cr"><div class="cr-main"><div class="cr-t">kontak-toko-maret.xlsx</div><div class="cr-s">12 Mar 2025 &middot; 22.7 KB</div></div><div class="cr-r">1.890 baris<small>Excel</small></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel Template -->
+  <div id="panel-template" style="display:none">
+    <div class="drop" id="dz2"
+      onclick="document.getElementById('fi2').click()"
+      ondragover="event.preventDefault();this.classList.add('over')"
+      ondragleave="this.classList.remove('over')"
+      ondrop="onDrop(event,'template')">
+      <input type="file" id="fi2" accept=".txt,.html,.docx" hidden onchange="onFile(event,'template')"/>
+      <div class="drop-t">Pilih atau seret file template pesan</div>
+      <div class="drop-s">TXT, HTML, DOCX &nbsp;&middot;&nbsp; Maks 10 MB</div>
+    </div>
+    <div style="margin-top:12px">
+      <div class="slbl">Template tersedia</div>
+      <div class="g card">
+        <div class="cr"><div class="cr-main"><div class="cr-t">Promo Ramadhan 2025</div><div class="cr-s">1 Jun 2025 &middot; promo.txt</div></div><div class="cr-r"><small>Promo</small></div></div>
+        <div class="cr"><div class="cr-main"><div class="cr-t">Newsletter Bulanan</div><div class="cr-s">15 Mei 2025 &middot; newsletter.html</div></div><div class="cr-r"><small>Newsletter</small></div></div>
+        <div class="cr"><div class="cr-main"><div class="cr-t">Undangan Webinar</div><div class="cr-s">2 Mei 2025 &middot; undangan.txt</div></div><div class="cr-r"><small>Undangan</small></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ── BROADCAST ── -->
+<section class="view" id="v-broadcast">
+<div class="pg">
+  <div style="padding:4px 2px 8px">
+    <div class="pt"><span>Broadcast</span> Email</div>
+    <div class="ps">Kirim email massal ke daftar kontak</div>
+  </div>
+  <div class="g compose">
+    <div class="finp">
+      <label class="flbl">Data penerima</label>
+      <select class="inp" id="selKontak">
+        <option value="1240">data-pelanggan-mei.xlsx — 1.240 kontak</option>
+        <option value="640">email-blast-april.csv — 640 kontak</option>
+        <option value="1890">kontak-toko-maret.xlsx — 1.890 kontak</option>
+      </select>
+    </div>
+    <div class="finp">
+      <label class="flbl">Subjek email</label>
+      <input type="text" class="inp" id="subjek" placeholder="Tulis subjek pesan"/>
+    </div>
+    <div class="finp">
+      <label class="flbl">Template pesan</label>
+      <select class="inp" id="selTemplate" onchange="applyTemplate()">
+        <option value="">Tulis manual</option>
+        <option value="promo">Promo Ramadhan 2025</option>
+        <option value="newsletter">Newsletter Bulanan</option>
+        <option value="undangan">Undangan Webinar</option>
+        <option value="reminder">Pengingat Tagihan</option>
+      </select>
+    </div>
+    <div class="finp">
+      <label class="flbl">Isi pesan</label>
+      <textarea class="inp" id="emailbody" placeholder="Isi pesan otomatis terisi jika template dipilih..."></textarea>
+    </div>
+    <button class="btn btn-dark" onclick="sendBC()">Genjod Sekarang</button>
+  </div>
+  <div>
+    <div class="slbl">Riwayat broadcast</div>
+    <div class="g card">
+      <div class="cr"><div class="cr-main"><div class="cr-t">Promo Ramadhan 2025</div><div class="cr-s">500 penerima &middot; 6 Jun 2025</div></div><div class="cr-r">498 sukses<small>99.6%</small></div></div>
+      <div class="cr"><div class="cr-main"><div class="cr-t">Newsletter Mei</div><div class="cr-s">640 penerima &middot; 1 Jun 2025</div></div><div class="cr-r">637 sukses<small>99.5%</small></div></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ── PAKET ── -->
+<section class="view" id="v-sub">
+<div class="pg">
+  <div style="padding:4px 2px 8px">
+    <div class="pt">Paket &amp; <span>Langganan</span></div>
+    <div class="ps">Pilih paket sesuai kebutuhan Anda</div>
+  </div>
+
+  <!-- FREE -->
+  <div>
+    <div class="slbl">Paket gratis</div>
+    <div class="plan g" onclick="pickPlan(this,'Free')" style="border-radius:16px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div>
+          <div class="plan-n">Free</div>
+          <div class="plan-price" style="font-size:16px;font-weight:400">Gratis</div>
+          <div class="plan-dur">Berlaku 1 hari &middot; Pengguna pertama</div>
+        </div>
+        <span class="pill pill-dim" style="margin-top:2px">1 hari</span>
+      </div>
+      <div class="plan-fs">
+        <div class="plan-f">100 email / hari</div>
+        <div class="plan-f">1 file upload</div>
+        <div class="plan-f">Berlaku untuk akun baru saja</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAID PLANS -->
+  <div>
+    <div class="slbl">Paket berbayar</div>
+    <div class="pgrid" id="planGrid">
+
+      <!-- WETAN COOL -->
+      <div class="plan" id="plan-cool" onclick="pickPlan(this,'WETAN COOL')">
+        <div class="plan-n">WETAN COOL</div>
+        <div class="plan-price">Rp 5k</div>
+        <div class="plan-dur">3 hari &middot; 150 email/hari</div>
+        <div class="plan-fs">
+          <div class="plan-f">Total 450 email</div>
+          <div class="plan-f">Kecepatan pengiriman</div>
+        </div>
+        <div class="speed-row" onclick="event.stopPropagation()">
+          <button class="speed-btn on" onclick="selSpeed(this,'cool','7')">7 mnt</button>
+          <button class="speed-btn" onclick="selSpeed(this,'cool','10')">10 mnt</button>
+          <button class="speed-btn" onclick="selSpeed(this,'cool','12')">12 mnt</button>
+          <button class="speed-btn" onclick="selSpeed(this,'cool','15')">15 mnt</button>
+        </div>
+      </div>
+
+      <!-- WETAN BANTI -->
+      <div class="plan" id="plan-banti" onclick="pickPlan(this,'WETAN BANTI')">
+        <div class="plan-n">WETAN BANTI</div>
+        <div class="plan-price">Rp 15k</div>
+        <div class="plan-dur">3 hari &middot; 250 email/hari</div>
+        <div class="plan-fs">
+          <div class="plan-f">Total 750 email</div>
+          <div class="plan-f">50 MB storage</div>
+        </div>
+        <div class="speed-row" onclick="event.stopPropagation()">
+          <button class="speed-btn on" onclick="selSpeed(this,'banti','7')">7 mnt</button>
+          <button class="speed-btn" onclick="selSpeed(this,'banti','10')">10 mnt</button>
+          <button class="speed-btn" onclick="selSpeed(this,'banti','12')">12 mnt</button>
+          <button class="speed-btn" onclick="selSpeed(this,'banti','15')">15 mnt</button>
+        </div>
+      </div>
+
+      <!-- WETAN BERISIK -->
+      <div class="plan" id="plan-berisik" onclick="pickPlan(this,'WETAN BERISIK')" style="grid-column:1/-1">
+        <span class="plan-tag">Terbaik</span>
+        <div class="plan-n">WETAN BERISIK</div>
+        <div class="plan-price">Rp 25k</div>
+        <div class="plan-dur">3 hari &middot; 500 email/hari</div>
+        <div class="plan-fs" style="display:grid;grid-template-columns:1fr 1fr;gap:3px 12px">
+          <div class="plan-f">Total 1.500 email</div>
+          <div class="plan-f">Unlimited upload</div>
+          <div class="plan-f">Pengiriman tercepat</div>
+        </div>
+        <div class="speed-row" onclick="event.stopPropagation()">
+          <button class="speed-btn on" onclick="selSpeed(this,'berisik','7')">7 mnt</button>
+          <button class="speed-btn" onclick="selSpeed(this,'berisik','10')">10 mnt</button>
+          <button class="speed-btn" onclick="selSpeed(this,'berisik','12')">12 mnt</button>
+          <button class="speed-btn" onclick="selSpeed(this,'berisik','15')">15 mnt</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div>
+    <div class="slbl">Riwayat transaksi</div>
+    <div class="g card">
+      <div class="cr">
+        <div class="cr-main"><div class="cr-t">WETAN BERISIK</div><div class="cr-s">1 Jun 2025 &middot; 3 hari</div></div>
+        <span class="pill pill-blue">aktif</span>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ── SETELAN ── -->
+<section class="view" id="v-set">
+<div class="pg">
+  <div style="padding:4px 2px 8px">
+    <div class="pt"><span>Setelan</span></div>
+  </div>
+  <div class="g">
+    <div class="pblock">
+      <div class="av" id="mainAv">B</div>
+      <div style="flex:1">
+        <div style="font-size:15px;font-weight:400;color:var(--text);letter-spacing:-.1px" id="mainName">Budi Santoso</div>
+        <div style="font-size:11px;color:var(--t2);margin-top:2px;font-weight:300" id="mainEmail">budi.santoso@email.com</div>
+        <div style="margin-top:6px;display:flex;gap:5px">
+          <span class="pill pill-blue">Pro</span>
+          <span class="pill pill-dim">Admin</span>
+        </div>
+      </div>
+      <button class="btn btn-ghost" onclick="openOverlay('overlayEdit')">Edit</button>
+    </div>
+  </div>
+  <div>
+    <div class="slbl">Akun</div>
+    <div class="sgrp">
+      <div class="srow" onclick="toast('Fitur keamanan segera hadir')">
+        <div class="srow-body"><div class="srow-t">Keamanan</div><div class="srow-s">Kata sandi &amp; verifikasi dua langkah</div></div>
+        <span class="srow-r">›</span>
+      </div>
+      <div class="srow" onclick="nav('sub')">
+        <div class="srow-body"><div class="srow-t">Paket saya</div><div class="srow-s">WETAN BERISIK &middot; Aktif 3 hari</div></div>
+        <span class="srow-r">›</span>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="slbl">Tampilan</div>
+    <div class="sgrp">
+      <div class="srow" style="cursor:default">
+        <div class="srow-body"><div class="srow-t">Mode gelap</div></div>
+        <div class="tog" id="dmtog" onclick="toggleTheme()"><div class="tok-k"></div></div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="slbl">Lainnya</div>
+    <div class="sgrp">
+      <div class="srow" onclick="toast('Halaman bantuan segera hadir')">
+        <div class="srow-body"><div class="srow-t">Bantuan</div><div class="srow-s">FAQ dan kontak tim</div></div>
+        <span class="srow-r">›</span>
+      </div>
+      <div class="srow" onclick="toast('WETAN MPTB v2.0.0')">
+        <div class="srow-body"><div class="srow-t">Tentang</div><div class="srow-s">v2.0.0</div></div>
+        <span class="srow-r">›</span>
+      </div>
+      <div class="srow red" onclick="doLogout()">
+        <div class="srow-body"><div class="srow-t">Keluar</div></div>
+        <span class="srow-r" style="color:inherit">›</span>
+      </div>
+    </div>
+  </div>
+  <div style="height:8px"></div>
+</div>
+</section>
+
+<!-- ── DYNAMIC ISLAND ── -->
+<div class="di-wrap">
+  <div class="di" id="di">
+    <div class="di-item on" id="n-dash" onclick="nav('dash')">
+      <div class="di-dot"></div>
+      <span class="di-lbl">Beranda</span>
+    </div>
+    <div class="di-sep"></div>
+    <div class="di-item" id="n-upload" onclick="nav('upload')">
+      <div class="di-dot"></div>
+      <span class="di-lbl">Upload</span>
+    </div>
+    <div class="di-sep"></div>
+    <div class="di-item" id="n-broadcast" onclick="nav('broadcast')">
+      <div class="di-dot"></div>
+      <span class="di-lbl">Broadcast</span>
+    </div>
+    <div class="di-sep"></div>
+    <div class="di-item" id="n-sub" onclick="nav('sub')">
+      <div class="di-dot"></div>
+      <span class="di-lbl">Paket</span>
+    </div>
+    <div class="di-sep"></div>
+    <div class="di-item" id="n-set" onclick="nav('set')">
+      <div class="di-dot"></div>
+      <span class="di-lbl">Setelan</span>
+    </div>
+  </div>
+</div>
+
+</div><!-- #app -->
+
+<script>
+// ── LOADING ──
+// Catatan: loadscreen kini disembunyikan oleh guardSession() setelah sesi
+// terverifikasi (lihat blok Supabase di bawah), bukan oleh timer tetap.
+window.addEventListener('load',()=>{
+  setTimeout(()=>{const b=document.getElementById('qbar');if(b)b.style.width='64%';},700);
+});
+
+// ── NAV ──
+let cur='dash';
+function nav(id){
+  if(id===cur)return;
+  document.getElementById('v-'+cur).classList.remove('active');
+  document.getElementById('n-'+cur).classList.remove('on');
+  cur=id;
+  document.getElementById('v-'+id).classList.add('active');
+  document.getElementById('n-'+id).classList.add('on');
+  document.querySelectorAll('.pg').forEach(e=>e.scrollTop=0);
+}
+
+// ── THEME ──
+let dark=false;
+function toggleTheme(){
+  dark=!dark;
+  document.documentElement.setAttribute('data-theme',dark?'dark':'light');
+  document.getElementById('tbtn').textContent=dark?'Terang':'Gelap';
+  document.getElementById('dmtog').classList.toggle('on',dark);
+}
+
+// ── OVERLAY ──
+function openOverlay(id){document.getElementById(id).classList.add('show')}
+function closeOverlay(id){document.getElementById(id).classList.remove('show')}
+document.querySelectorAll('.overlay').forEach(o=>{
+  o.addEventListener('click',function(e){if(e.target===this)closeOverlay(this.id)});
+});
+
+// ── TOAST ──
+function toast(msg){
+  const tc=document.getElementById('TC');
+  const el=document.createElement('div');
+  el.className='toast';
+  el.innerHTML='<div class="toast-t">'+msg+'</div>';
+  tc.appendChild(el);
+  setTimeout(()=>{el.classList.add('out');setTimeout(()=>el.remove(),220)},2800);
+}
+
+// ── UPLOAD TABS ──
+function switchTab(t){
+  const k=t==='kontak';
+  document.getElementById('panel-kontak').style.display=k?'block':'none';
+  document.getElementById('panel-template').style.display=k?'none':'block';
+  const bk=document.getElementById('tab-kontak');
+  const bt=document.getElementById('tab-template');
+  bk.style.background=k?'var(--text)':'transparent';bk.style.color=k?'var(--bg)':'var(--t2)';
+  bt.style.background=k?'transparent':'var(--text)';bt.style.color=k?'var(--t2)':'var(--bg)';
+}
+function onFile(e,type){
+  const f=e.target.files[0];if(!f)return;
+  toast('"'+f.name+'" berhasil diupload sebagai '+(type==='kontak'?'daftar kontak':'template pesan'));
+}
+function onDrop(e,type){
+  e.preventDefault();
+  document.getElementById(type==='kontak'?'dz':'dz2').classList.remove('over');
+  const f=e.dataTransfer.files[0];
+  if(f)onFile({target:{files:[f]}},type);
+}
+
+// ── TEMPLATE ──
+const tpls={
+  promo:'Halo {nama},\n\nKami mempersembahkan penawaran spesial Ramadhan 2025 khusus untuk Anda.\n\nDiskon hingga 40% untuk semua produk pilihan. Berlaku hingga akhir bulan.\n\nSalam,\nTim WETAN MPTB',
+  newsletter:'Halo {nama},\n\nBerikut update terbaru dari kami bulan ini.\n\n— [Berita utama]\n— [Update produk]\n— [Tips & trik]\n\nSampai jumpa bulan depan,\nTim WETAN MPTB',
+  undangan:'Halo {nama},\n\nKami mengundang Anda bergabung dalam Webinar eksklusif.\n\nTanggal : [Tanggal]\nWaktu   : [Jam] WIB\nPlatform: Zoom\n\nSalam,\nTim WETAN MPTB',
+  reminder:'Halo {nama},\n\nIni pengingat tagihan yang akan jatuh tempo.\n\nNominal     : Rp [jumlah]\nJatuh tempo : [tanggal]\n\nTerima kasih,\nTim WETAN MPTB'
+};
+function applyTemplate(){
+  const v=document.getElementById('selTemplate').value;
+  document.getElementById('emailbody').value=v&&tpls[v]?tpls[v]:'';
+}
+
+// ── BROADCAST ──
+const contacts={
+  '1240':['Andi Prasetyo','Siti Rahayu','Budi Kurniawan','Dewi Lestari','Eko Santoso','Fitri Handayani','Galih Nugroho','Heni Wulandari','Irwan Setiawan','Joko Susilo','...dan 1.230 lainnya'],
+  '640':['Ahmad Fauzi','Bagas Ardianto','Citra Permata','Dian Safitri','Endra Wahyu','Fajar Maulana','Gita Nuraini','...dan 633 lainnya'],
+  '1890':['Agus Mulyono','Bintang Cahaya','Cahya Dewi','Dedi Supriadi','Eka Putri','Faisal Rahman','...dan 1.884 lainnya']
+};
+function sendBC(){
+  const selEl=document.getElementById('selKontak');
+  const count=selEl.value;
+  const lbl=selEl.options[selEl.selectedIndex].text.split('—')[0].trim();
+  const names=contacts[count]||[];
+  toast('Mengirim...');
+  setTimeout(()=>{
+    document.getElementById('popupSub').innerHTML=
+      'Pesan berhasil dikirim ke <strong>'+parseInt(count).toLocaleString('id-ID')+'</strong> kontak dari <em>'+lbl+'</em>.';
+    const nl=document.getElementById('popupNames');
+    nl.innerHTML='';
+    names.forEach(n=>{
+      const d=document.createElement('div');
+      d.className='popup-name';
+      d.innerHTML='<strong>'+n+'</strong>';
+      nl.appendChild(d);
+    });
+    openOverlay('overlaySuccess');
+  },1800);
+}
+
+// ── PLANS ──
+function pickPlan(el,n){
+  document.querySelectorAll('.plan').forEach(p=>{
+    p.classList.remove('on');
+    const t=p.querySelector('.plan-tag');if(t&&t.textContent==='dipilih')t.remove();
+  });
+  el.classList.add('on');
+  toast('Paket '+n+' dipilih');
+}
+function selSpeed(btn,plan,val){
+  const row=btn.closest('.speed-row');
+  row.querySelectorAll('.speed-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  toast('Interval '+val+' menit dipilih untuk paket tersebut');
+}
+
+// ── PROFILE SAVE ──
+async function saveProfile(){
+  const nama=document.getElementById('editNama').value.trim()||'Pengguna';
+  const email=document.getElementById('editEmail').value.trim();
+  const btn=document.querySelector('#overlayEdit .btn-dark');
+  const original=btn.textContent;
+  btn.textContent='Menyimpan…';btn.disabled=true;
+
+  try{
+    if(window.sb){
+      const updates={data:{full_name:nama}};
+      // Ganti email lewat Supabase memerlukan verifikasi ulang via email
+      if(email && window.currentUser && email!==window.currentUser.email){
+        updates.email=email;
+      }
+      const {data,error}=await window.sb.auth.updateUser(updates);
+      if(error){
+        toast(error.message,true);
+        btn.textContent=original;btn.disabled=false;
+        return;
+      }
+      if(updates.email){
+        toast('Profil disimpan. Periksa email baru untuk verifikasi.');
+      }else{
+        toast('Profil berhasil diperbarui');
+      }
+    }else{
+      toast('Profil berhasil diperbarui');
+    }
+  }catch(err){
+    console.error(err);
+    toast('Gagal menyimpan profil',true);
+    btn.textContent=original;btn.disabled=false;
+    return;
+  }
+
+  document.getElementById('mainName').textContent=nama;
+  document.getElementById('greetName').textContent=nama.split(' ')[0];
+  document.getElementById('mainAv').textContent=nama.charAt(0).toUpperCase();
+  document.getElementById('editAvPreview').textContent=nama.charAt(0).toUpperCase();
+  btn.textContent=original;btn.disabled=false;
+  closeOverlay('overlayEdit');
+}
+</script>
+<!-- SUPABASE CONNECTOR -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+
+  const SUPABASE_URL = "https://mdekofhdtcswlvtdnzgj.supabase.co";
+  const SUPABASE_ANON_KEY =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1kZWtvZmhkdGNzd2x2dGRuemdqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE5NjU1NDMsImV4cCI6MjA5NzU0MTU0M30.rVVWFjhJ39VFk85QiR7Ndqf-uYqaedmOka7BgjwcFBU";
+
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  window.sb = sb;
+
+  // Halaman tujuan jika belum login
+  const LOGIN_PAGE = 'index.html';
+
+  async function guardSession(){
+    try{
+      const { data:{session} } = await sb.auth.getSession();
+
+      if(!session){
+        console.log("ℹ️ Belum login, mengalihkan ke halaman login");
+        window.location.href = LOGIN_PAGE;
+        return;
+      }
+
+      console.log("✅ Login sebagai:", session.user.email);
+      window.currentUser = session.user;
+      applyUserToUI(session.user);
+
+      // Sembunyikan loading screen setelah sesi terverifikasi
+      const ls = document.getElementById('loadscreen');
+      if(ls){
+        setTimeout(()=>{
+          ls.classList.add('hide');
+          setTimeout(()=>ls.remove(),600);
+        },400);
+      }
+
+    }catch(err){
+      console.error("❌ Supabase Error:", err);
+      window.location.href = LOGIN_PAGE;
+    }
+  }
+
+  // Isi nama & email ke UI berdasarkan data user yang login
+  function applyUserToUI(user){
+    const meta = user.user_metadata || {};
+    const nama = meta.full_name || (user.email ? user.email.split('@')[0] : 'Pengguna');
+    const email = user.email || '';
+    const initial = nama.charAt(0).toUpperCase();
+
+    const set = (id, val) => { const el = document.getElementById(id); if(el) el.textContent = val; };
+    set('mainName', nama);
+    set('mainEmail', email);
+    set('greetName', nama.split(' ')[0]);
+    set('mainAv', initial);
+    set('editAvPreview', initial);
+
+    const editNama = document.getElementById('editNama');
+    const editEmail = document.getElementById('editEmail');
+    if(editNama) editNama.value = nama;
+    if(editEmail) editEmail.value = email;
+  }
+
+  // Logout sesungguhnya, dipanggil dari tombol "Keluar" di Setelan
+  window.doLogout = async function(){
+    try{
+      await sb.auth.signOut();
+    }catch(err){
+      console.error("❌ Gagal logout:", err);
+    }
+    window.location.href = LOGIN_PAGE;
+  };
+
+  // Jalankan pengecekan sesi sesegera mungkin, jangan tunggu window.load
+  // supaya dashboard tidak sempat "berkedip" sebelum redirect.
+  guardSession();
+
+  // Jika sesi berubah (mis. token kedaluwarsa / logout di tab lain)
+  sb.auth.onAuthStateChange((event, session) => {
+    if(event === 'SIGNED_OUT' || !session){
+      window.location.href = LOGIN_PAGE;
+    }
+  });
+
+})();
+</script>
+</body>
+</html>

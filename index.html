@@ -670,6 +670,7 @@ async function doLogin(){
   try{
     if(!sb)await new Promise(r=>loadSupabase(r));
     const {data,error}=await sb.auth.signInWithPassword({email,password:pass});
+    console.log("LOGIN RESULT", {data,error});
     if(error){
       toast(error.message==='Invalid login credentials'?'Email atau kata sandi salah':error.message,true);
       setBtnLoading('btnLogin',false);

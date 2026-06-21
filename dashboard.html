@@ -1047,43 +1047,37 @@ async function saveProfile(){
     if(editNama) editNama.value = nama;
     if(editEmail) editEmail.value = email;
   }
+
 async function loadProfile(){
 
   const { data:{user} } = await sb.auth.getUser();
 
-  if(!user) return;
+  console.log("AUTH USER", user);
 
-  const { data:profile, error } =
-    await sb
-      .from('profiles')
-      .select('*')
-      .eq('id', user.id)
-      .single();
+  const { data, error } = await sb
+    .from('profiles')
+    .select('*')
+    .eq('id', user.id);
+
+  console.log("PROFILE RESULT", {
+    userId: user.id,
+    data,
+    error
+  });
 
   if(error){
-    console.error('Profile Error:', error);
+    console.error("PROFILE ERROR", error);
     return;
   }
 
-  // Nama
-  const mainName = document.getElementById('mainName');
-  if(mainName) mainName.textContent = profile.nama || 'User';
-
-  // Email
-  const mainEmail = document.getElementById('mainEmail');
-  if(mainEmail) mainEmail.textContent = profile.email || user.email;
-
-  // Sapaan
-  const greetName = document.getElementById('greetName');
-  if(greetName){
-    greetName.textContent =
-      (profile.nama || 'User').split(' ')[0];
+  if(!data || !data.length){
+    console.error("PROFILE NOT FOUND");
+    return;
   }
 
-  // Simpan global
-  window.profile = profile;
+  const profile = data[0];
 
-  console.log('✅ Profile loaded', profile);
+  console.log("PROFILE", profile);
 }
 
 

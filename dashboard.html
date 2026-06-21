@@ -1011,6 +1011,7 @@ async function saveProfile(){
       console.log("✅ Login sebagai:", session.user.email);
       window.currentUser = session.user;
       applyUserToUI(session.user);
+await loadProfile();
 
       // Sembunyikan loading screen setelah sesi terverifikasi
       const ls = document.getElementById('loadscreen');
@@ -1046,6 +1047,45 @@ async function saveProfile(){
     if(editNama) editNama.value = nama;
     if(editEmail) editEmail.value = email;
   }
+async function loadProfile(){
+
+  const { data:{user} } = await sb.auth.getUser();
+
+  if(!user) return;
+
+  const { data:profile, error } =
+    await sb
+      .from('profiles')
+      .select('*')
+      .eq('id', user.id)
+      .single();
+
+  if(error){
+    console.error('Profile Error:', error);
+    return;
+  }
+
+  // Nama
+  const mainName = document.getElementById('mainName');
+  if(mainName) mainName.textContent = profile.nama || 'User';
+
+  // Email
+  const mainEmail = document.getElementById('mainEmail');
+  if(mainEmail) mainEmail.textContent = profile.email || user.email;
+
+  // Sapaan
+  const greetName = document.getElementById('greetName');
+  if(greetName){
+    greetName.textContent =
+      (profile.nama || 'User').split(' ')[0];
+  }
+
+  // Simpan global
+  window.profile = profile;
+
+  console.log('✅ Profile loaded', profile);
+}
+
 
   // Logout sesungguhnya, dipanggil dari tombol "Keluar" di Setelan
   window.doLogout = async function(){

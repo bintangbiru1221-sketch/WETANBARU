@@ -1011,7 +1011,7 @@ async function saveProfile(){
       console.log("✅ Login sebagai:", session.user.email);
       window.currentUser = session.user;
       applyUserToUI(session.user);
-await loadProfile();
+      await loadProfile();
 
       // Sembunyikan loading screen setelah sesi terverifikasi
       const ls = document.getElementById('loadscreen');
@@ -1106,6 +1106,49 @@ async function loadProfile(){
     if(event === 'SIGNED_OUT' || !session){
       window.location.href = LOGIN_PAGE;
     }
+
+  async function loadProfile(){
+
+  const { data:{user} } =
+    await sb.auth.getUser();
+
+  if(!user) return;
+
+  const { data:profile, error } =
+    await sb
+      .from('profiles')
+      .select('*')
+      .eq('id', user.id)
+      .single();
+
+  if(error){
+    console.error(error);
+    return;
+  }
+
+  // Nama
+  const mainName=document.getElementById('mainName');
+  if(mainName){
+    mainName.textContent=profile.nama;
+  }
+
+  // Email
+  const mainEmail=document.getElementById('mainEmail');
+  if(mainEmail){
+    mainEmail.textContent=profile.email;
+  }
+
+  // Sapaan
+  const greetName=document.getElementById('greetName');
+  if(greetName){
+    greetName.textContent=
+      profile.nama.split(' ')[0];
+  }
+
+  console.log("PROFILE",profile);
+}
+
+
   });
 
 })();

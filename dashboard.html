@@ -1,3 +1,4 @@
+cat > /home/claude/wetanbaru/WETANBARU-main/dashboard.html << 'HTMLEOF'
 <!DOCTYPE html>
 <html lang="id" data-theme="light">
 <head>
@@ -61,9 +62,7 @@ body::before{
 }
 .load-logo span{font-size:30px;font-weight:300;color:var(--bg);letter-spacing:-1px}
 @keyframes logoPulse{from{transform:scale(1);opacity:.9}to{transform:scale(1.04);opacity:1}}
-.ios-spinner{
-  width:28px;height:28px;position:relative;
-}
+.ios-spinner{width:28px;height:28px;position:relative;}
 .ios-spinner span{
   position:absolute;left:50%;top:50%;
   width:2.5px;height:8px;border-radius:2px;
@@ -120,10 +119,10 @@ body::before{
 /* ── SCROLL ── */
 .pg{
   flex:1;overflow-y:auto;
-  padding:16px 16px calc(96px + var(--safe-b));
+  padding:16px 16px calc(112px + var(--safe-b));
   display:flex;flex-direction:column;gap:12px;
 }
-@media(min-width:600px){.pg{padding:20px 20px calc(104px + var(--safe-b));max-width:560px;margin:0 auto;width:100%}}
+@media(min-width:600px){.pg{padding:20px 20px calc(120px + var(--safe-b));max-width:560px;margin:0 auto;width:100%}}
 
 .slbl{font-size:11px;font-weight:500;color:var(--t3);letter-spacing:.06em;text-transform:uppercase;padding:0 4px;margin-bottom:6px;margin-top:4px}
 
@@ -168,6 +167,8 @@ body::before{
 [data-theme="dark"] .pill-blue{background:rgba(77,124,255,0.12);color:var(--acc)}
 .pill-dim{background:rgba(0,0,0,0.04);color:var(--t3)}
 [data-theme="dark"] .pill-dim{background:rgba(255,255,255,0.05);color:var(--t3)}
+.pill-green{background:rgba(46,158,91,0.1);color:#2e9e5b}
+[data-theme="dark"] .pill-green{background:rgba(46,158,91,0.15);color:#4ec878}
 
 /* ── INPUTS ── */
 .finp{display:flex;flex-direction:column;gap:5px}
@@ -200,9 +201,10 @@ select.inp{cursor:pointer;-webkit-appearance:none;appearance:none}
   transition:opacity .15s,transform .1s;
   display:inline-flex;align-items:center;justify-content:center;gap:6px;
 }
-.btn:active{transform:scale(.98)}
+.btn:active:not(:disabled){transform:scale(.98)}
 .btn-dark{background:var(--text);color:var(--bg);width:100%}
-.btn-dark:hover{opacity:.85}
+.btn-dark:hover:not(:disabled){opacity:.85}
+.btn-dark:disabled{opacity:.38;cursor:default;transform:none}
 .btn-ghost{background:transparent;border:1px solid var(--glass-b);color:var(--t2);padding:8px 14px;font-size:12px}
 .btn-ghost:hover{background:var(--glass-h);color:var(--text)}
 
@@ -230,8 +232,7 @@ select.inp{cursor:pointer;-webkit-appearance:none;appearance:none}
 .plan.on{border-color:var(--text);background:var(--glass-h)}
 .plan-n{font-size:12px;font-weight:600;color:var(--text);margin-bottom:1px;letter-spacing:.01em}
 .plan-price{font-size:19px;font-weight:300;color:var(--text);letter-spacing:-.4px;margin:3px 0}
-.plan-dur{font-size:10px;color:var(--t3);margin-bottom:8px}
-.plan-fs{display:flex;flex-direction:column;gap:3px}
+.plan-fs{display:flex;flex-direction:column;gap:3px;margin-top:4px}
 .plan-f{font-size:10px;color:var(--t2);line-height:1.5}
 .plan-tag{
   position:absolute;top:9px;right:9px;
@@ -239,9 +240,9 @@ select.inp{cursor:pointer;-webkit-appearance:none;appearance:none}
   background:var(--text);padding:2px 6px;border-radius:4px;letter-spacing:.04em;
 }
 /* speed selector inside plan */
-.speed-row{display:flex;gap:4px;flex-wrap:wrap;margin-top:8px}
+.speed-row{display:flex;gap:4px;flex-wrap:wrap;margin-top:10px}
 .speed-btn{
-  font-size:9px;font-weight:400;padding:3px 7px;border-radius:6px;
+  font-size:10px;font-weight:400;padding:5px 9px;border-radius:8px;
   border:1px solid rgba(0,0,0,0.1);background:transparent;color:var(--t2);
   cursor:pointer;transition:all .15s;font-family:inherit;
 }
@@ -282,66 +283,65 @@ select.inp{cursor:pointer;-webkit-appearance:none;appearance:none}
 }
 [data-theme="dark"] .av{background:rgba(255,255,255,0.07)}
 
-/* ── DYNAMIC ISLAND ── */
+/* ── DYNAMIC ISLAND — LEBIH BESAR ── */
 .di-wrap{
   position:fixed;
-  bottom:calc(16px + var(--safe-b));
+  bottom:calc(20px + var(--safe-b));
   left:50%;transform:translateX(-50%);
   z-index:200;
-  width:calc(100% - 32px);
-  max-width:480px;
+  width:calc(100% - 24px);
+  max-width:520px;
   display:flex;justify-content:center;
   pointer-events:none;
 }
 .di{
   pointer-events:auto;
   display:flex;align-items:center;
-  background:rgba(12,12,14,0.82);
+  background:rgba(12,12,14,0.88);
   backdrop-filter:blur(40px) saturate(200%);
   -webkit-backdrop-filter:blur(40px) saturate(200%);
-  border:1px solid rgba(255,255,255,0.11);
-  border-radius:40px;
-  padding:7px 8px;
+  border:1px solid rgba(255,255,255,0.13);
+  border-radius:44px;
+  padding:10px 10px;
   gap:0;
   box-shadow:
-    0 12px 40px rgba(0,0,0,0.32),
-    0 4px 12px rgba(0,0,0,0.18),
-    inset 0 1px 0 rgba(255,255,255,0.07);
+    0 14px 48px rgba(0,0,0,0.38),
+    0 4px 16px rgba(0,0,0,0.22),
+    inset 0 1px 0 rgba(255,255,255,0.09);
   width:100%;
   justify-content:space-between;
   transition:all .4s cubic-bezier(.16,1,.3,1);
 }
-/* glass tint on light mode */
 [data-theme="light"] .di{
-  background:rgba(22,22,26,0.80);
+  background:rgba(22,22,26,0.85);
 }
 .di-item{
   flex:1;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:7px 6px 6px;
-  border-radius:32px;
+  padding:9px 6px 8px;
+  border-radius:36px;
   cursor:pointer;
   transition:background .25s cubic-bezier(.16,1,.3,1),transform .2s;
   user-select:none;
-  gap:3px;
+  gap:5px;
   min-width:0;
   position:relative;
 }
-.di-item:active{transform:scale(.92)}
-.di-item.on{background:rgba(255,255,255,0.13)}
-.di-dot{
-  width:3.5px;height:3.5px;border-radius:50%;
-  background:rgba(255,255,255,0.22);
-  transition:background .25s,transform .3s cubic-bezier(.34,1.56,.64,1);
-  flex-shrink:0;
+.di-item:active{transform:scale(.90)}
+.di-item.on{background:rgba(255,255,255,0.15)}
+.di-icon{
+  font-size:18px;
+  line-height:1;
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1);
+  filter:grayscale(1) brightness(0.55);
 }
-.di-item.on .di-dot{
-  background:rgba(255,255,255,0.9);
-  transform:scale(1.5);
+.di-item.on .di-icon{
+  filter:grayscale(0) brightness(1);
+  transform:scale(1.15);
 }
 .di-lbl{
-  font-size:10px;font-weight:400;
-  color:rgba(255,255,255,0.32);
+  font-size:10.5px;font-weight:400;
+  color:rgba(255,255,255,0.35);
   transition:color .2s;
   white-space:nowrap;
   letter-spacing:.01em;
@@ -350,36 +350,36 @@ select.inp{cursor:pointer;-webkit-appearance:none;appearance:none}
   max-width:100%;
   text-align:center;
 }
-.di-item.on .di-lbl{color:rgba(255,255,255,0.88)}
+.di-item.on .di-lbl{color:rgba(255,255,255,0.92);font-weight:500}
 .di-sep{
-  width:1px;height:24px;
-  background:rgba(255,255,255,0.07);
-  flex-shrink:0;margin:0 2px;
+  width:1px;height:28px;
+  background:rgba(255,255,255,0.08);
+  flex-shrink:0;margin:0 1px;
   align-self:center;
 }
 
-/* ── OVERLAY / POPUP (glass) ── */
+/* ── OVERLAY / POPUP — BLUR BACKDROP ── */
 .overlay{
   position:fixed;inset:0;z-index:500;
-  background:rgba(0,0,0,0.3);
-  backdrop-filter:blur(12px) saturate(160%);
-  -webkit-backdrop-filter:blur(12px) saturate(160%);
+  background:rgba(0,0,0,0.45);
+  backdrop-filter:blur(18px) saturate(160%);
+  -webkit-backdrop-filter:blur(18px) saturate(160%);
   display:flex;align-items:center;justify-content:center;
   padding:24px;
   opacity:0;pointer-events:none;
-  transition:opacity .28s;
+  transition:opacity .3s;
 }
 .overlay.show{opacity:1;pointer-events:auto}
 .popup{
-  width:100%;max-width:360px;
+  width:100%;max-width:380px;
   background:var(--glass);
-  backdrop-filter:blur(48px) saturate(200%);
-  -webkit-backdrop-filter:blur(48px) saturate(200%);
-  border:1px solid var(--glass-b);border-radius:26px;
+  backdrop-filter:blur(56px) saturate(220%);
+  -webkit-backdrop-filter:blur(56px) saturate(220%);
+  border:1px solid var(--glass-b);border-radius:28px;
   padding:28px 24px;
-  transform:translateY(18px) scale(.96);
-  transition:transform .32s cubic-bezier(.16,1,.3,1);
-  box-shadow:0 16px 48px rgba(0,0,0,0.14),0 4px 12px rgba(0,0,0,0.08);
+  transform:translateY(20px) scale(.95);
+  transition:transform .34s cubic-bezier(.16,1,.3,1);
+  box-shadow:0 24px 64px rgba(0,0,0,0.18),0 4px 16px rgba(0,0,0,0.10);
 }
 .overlay.show .popup{transform:none}
 .popup-title{font-size:17px;font-weight:500;color:var(--text);margin-bottom:4px;letter-spacing:-.2px}
@@ -444,6 +444,78 @@ select.inp{cursor:pointer;-webkit-appearance:none;appearance:none}
 .bank-name{font-size:13px;font-weight:500;color:var(--text)}
 .bank-sub{font-size:11px;color:var(--t2);margin-top:2px}
 .bank-arrow{font-size:14px;color:var(--t3)}
+
+/* ── MULTI AKUN ── */
+.akun-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.akun-list{display:flex;flex-direction:column;gap:8px}
+.akun-card{
+  padding:14px 16px;border-radius:14px;border:1px solid var(--glass-b);
+  background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  cursor:pointer;transition:border-color .18s,background .18s;
+  display:flex;align-items:center;gap:12px;
+}
+.akun-card:hover{border-color:var(--text);background:var(--glass-h)}
+.akun-card.active-account{border-color:var(--acc)}
+.akun-av{
+  width:38px;height:38px;border-radius:50%;
+  background:rgba(0,0,0,0.06);
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;font-weight:400;color:var(--t2);flex-shrink:0;
+}
+[data-theme="dark"] .akun-av{background:rgba(255,255,255,0.07)}
+.akun-info{flex:1;min-width:0}
+.akun-name{font-size:13px;font-weight:400;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.akun-email{font-size:11px;color:var(--t2);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.akun-actions{display:flex;gap:6px;flex-shrink:0}
+.akun-btn{
+  font-size:10px;font-weight:400;padding:4px 10px;border-radius:8px;
+  border:1px solid var(--glass-b);background:transparent;color:var(--t2);
+  cursor:pointer;transition:all .15s;font-family:inherit;
+}
+.akun-btn:hover{background:var(--glass-h);color:var(--text)}
+.akun-btn.danger{color:#c0392b;border-color:rgba(192,57,43,0.2)}
+[data-theme="dark"] .akun-btn.danger{color:#e05050}
+.akun-btn.primary{background:var(--text);color:var(--bg);border-color:var(--text)}
+/* add account form */
+.add-akun-form{
+  padding:16px;border-radius:14px;
+  border:1px dashed rgba(0,0,0,0.12);
+  background:transparent;
+  display:flex;flex-direction:column;gap:12px;
+}
+[data-theme="dark"] .add-akun-form{border-color:rgba(255,255,255,0.1)}
+.broadcast-akun-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:4px}
+.broadcast-akun-btn{
+  font-size:11px;font-weight:400;padding:6px 12px;border-radius:10px;
+  border:1px solid var(--glass-b);background:transparent;color:var(--t2);
+  cursor:pointer;transition:all .15s;font-family:inherit;
+  display:flex;align-items:center;gap:5px;
+}
+.broadcast-akun-btn.active{background:var(--text);color:var(--bg);border-color:var(--text)}
+.broadcast-akun-btn .status-dot{
+  width:6px;height:6px;border-radius:50%;background:currentColor;
+  opacity:.5;flex-shrink:0;
+}
+.broadcast-akun-btn.active .status-dot{opacity:1;background:#4ec878}
+.interval-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:6px}
+.interval-btn{
+  font-size:11px;font-weight:400;padding:8px 4px;border-radius:10px;
+  border:1px solid var(--glass-b);background:transparent;color:var(--t2);
+  cursor:pointer;transition:all .15s;font-family:inherit;text-align:center;
+}
+.interval-btn.on{background:var(--text);color:var(--bg);border-color:var(--text)}
+/* running status badge */
+.running-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:10px;font-weight:400;padding:2px 8px 2px 5px;border-radius:20px;
+  background:rgba(46,158,91,0.1);color:#2e9e5b;
+}
+[data-theme="dark"] .running-badge{background:rgba(78,200,120,0.12);color:#4ec878}
+.running-badge::before{
+  content:'';width:5px;height:5px;border-radius:50%;background:currentColor;
+  animation:pulse 1.2s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 
 /* scrollbar */
 ::-webkit-scrollbar{width:0}
@@ -519,30 +591,24 @@ select.inp{cursor:pointer;-webkit-appearance:none;appearance:none}
 <div class="overlay" id="overlayBayar">
   <div class="popup">
     <div class="popup-title">Pilih Metode Pembayaran</div>
-    <div class="popup-sub">Selesaikan pembayaran sesuai bank pilihan Anda</div>
+    <div class="popup-sub" id="payPopupSub">Selesaikan pembayaran sesuai bank pilihan Anda</div>
     <div class="bank-grid">
-
-      <!-- BCA -->
       <button class="bank-btn bank-bca" onclick="pilihBank('BCA')">
         <div class="bank-icon">BCA</div>
         <div class="bank-info">
           <div class="bank-name">BCA Transfer</div>
-          <div class="bank-sub">Virtual Account &middot; Konfirmasi otomatis</div>
+          <div class="bank-sub">Virtual Account · Konfirmasi otomatis</div>
         </div>
         <span class="bank-arrow">›</span>
       </button>
-
-      <!-- Mandiri -->
       <button class="bank-btn bank-mandiri" onclick="pilihBank('Mandiri')">
         <div class="bank-icon">MDR</div>
         <div class="bank-info">
           <div class="bank-name">Bank Mandiri</div>
-          <div class="bank-sub">Virtual Account &middot; Konfirmasi otomatis</div>
+          <div class="bank-sub">Virtual Account · Konfirmasi otomatis</div>
         </div>
         <span class="bank-arrow">›</span>
       </button>
-
-      <!-- Bank Lain -->
       <button class="bank-btn bank-other coming" disabled>
         <div class="bank-icon">🏦</div>
         <div class="bank-info">
@@ -551,9 +617,75 @@ select.inp{cursor:pointer;-webkit-appearance:none;appearance:none}
         </div>
         <span class="bank-arrow" style="font-size:11px;color:var(--t3)">Soon</span>
       </button>
-
     </div>
     <button class="btn btn-ghost" style="width:100%" onclick="closeOverlay('overlayBayar')">Batal</button>
+  </div>
+</div>
+
+<!-- TAMBAH AKUN EMAIL POPUP -->
+<div class="overlay" id="overlayTambahAkun">
+  <div class="popup">
+    <div class="popup-title">Tambah Akun Email</div>
+    <div class="popup-sub">Tambahkan akun email pengirim baru ke akun sumber Anda</div>
+    <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:20px">
+      <div class="finp">
+        <label class="flbl">Nama Akun</label>
+        <input type="text" class="inp" id="newAkunNama" placeholder="Contoh: Akun Promosi"/>
+      </div>
+      <div class="finp">
+        <label class="flbl">Email Pengirim</label>
+        <input type="email" class="inp" id="newAkunEmail" placeholder="pengirim@email.com"/>
+      </div>
+      <div class="finp">
+        <label class="flbl">Nama Pengirim</label>
+        <input type="text" class="inp" id="newAkunSender" placeholder="Nama yang tampil di email"/>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost" style="flex:1" onclick="closeOverlay('overlayTambahAkun')">Batal</button>
+      <button class="btn btn-dark" style="flex:2" onclick="simpanAkun()">Tambah Akun</button>
+    </div>
+  </div>
+</div>
+
+<!-- DETAIL BROADCAST AKUN POPUP -->
+<div class="overlay" id="overlayBroadcastAkun">
+  <div class="popup" style="max-width:420px">
+    <div class="popup-title" id="bcAkunTitle">Broadcast — Akun A</div>
+    <div class="popup-sub" id="bcAkunSub">Konfigurasikan broadcast untuk akun ini</div>
+    <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:20px">
+      <div class="finp">
+        <label class="flbl">Template yang digunakan</label>
+        <select class="inp" id="bcAkunTemplate">
+          <option value="">Pilih template...</option>
+        </select>
+      </div>
+      <div class="finp">
+        <label class="flbl">Interval Pengiriman</label>
+        <div class="interval-grid" id="bcIntervalGrid">
+          <button class="interval-btn" onclick="pilihInterval(this,'3')">3 mnt</button>
+          <button class="interval-btn" onclick="pilihInterval(this,'5')">5 mnt</button>
+          <button class="interval-btn on" onclick="pilihInterval(this,'7')">7 mnt</button>
+          <button class="interval-btn" onclick="pilihInterval(this,'10')">10 mnt</button>
+          <button class="interval-btn" onclick="pilihInterval(this,'12')">12 mnt</button>
+          <button class="interval-btn" onclick="pilihInterval(this,'15')">15 mnt</button>
+          <button class="interval-btn" onclick="pilihInterval(this,'20')">20 mnt</button>
+          <button class="interval-btn" onclick="pilihInterval(this,'30')">30 mnt</button>
+        </div>
+      </div>
+      <div class="finp">
+        <label class="flbl">Daftar Penerima</label>
+        <select class="inp" id="bcAkunPenerima">
+          <option value="1240">data-pelanggan-mei.xlsx — 1.240 kontak</option>
+          <option value="640">email-blast-april.csv — 640 kontak</option>
+          <option value="1890">kontak-toko-maret.xlsx — 1.890 kontak</option>
+        </select>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost" style="flex:1" onclick="closeOverlay('overlayBroadcastAkun')">Batal</button>
+      <button class="btn btn-dark" style="flex:2" onclick="mulaibroadcastAkun()">🚀 Mulai Broadcast</button>
+    </div>
   </div>
 </div>
 
@@ -573,7 +705,7 @@ select.inp{cursor:pointer;-webkit-appearance:none;appearance:none}
 <div class="pg">
   <div style="padding:4px 2px 8px">
     <div class="pt">Selamat datang, <span id="greetName">Budi</span></div>
-    <div class="ps">Paket Pro &middot; Aktif hingga 31 Des 2025</div>
+    <div class="ps">Paket Pro · Aktif hingga 31 Des 2025</div>
   </div>
   <div class="sgrid">
     <div class="g scard"><div class="sv">1.284</div><div class="sl">Email terkirim<br>bulan ini</div></div>
@@ -600,6 +732,12 @@ select.inp{cursor:pointer;-webkit-appearance:none;appearance:none}
     <div class="ps">Import daftar kontak dan template pesan</div>
   </div>
 
+  <!-- Akun selector untuk upload -->
+  <div class="g" style="padding:14px 18px">
+    <div style="font-size:11px;color:var(--t3);font-weight:500;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Upload ke akun</div>
+    <div class="broadcast-akun-row" id="uploadAkunRow"></div>
+  </div>
+
   <!-- Tab switch -->
   <div style="display:flex;gap:0;background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--glass-b);border-radius:14px;padding:4px">
     <button class="tab-btn" id="tab-kontak" onclick="switchTab('kontak')" style="flex:1;padding:8px;border-radius:10px;border:none;font-family:inherit;font-size:12px;font-weight:400;cursor:pointer;transition:all .2s;background:var(--text);color:var(--bg)">Daftar Kontak</button>
@@ -615,14 +753,14 @@ select.inp{cursor:pointer;-webkit-appearance:none;appearance:none}
       ondrop="onDrop(event,'kontak')">
       <input type="file" id="fi" accept=".csv,.xlsx,.xls" hidden onchange="onFile(event,'kontak')"/>
       <div class="drop-t">Pilih atau seret file daftar kontak</div>
-      <div class="drop-s">CSV, XLSX, XLS &nbsp;&middot;&nbsp; Maks 200 MB<br>Pastikan ada kolom <em>nama</em> dan <em>email</em></div>
+      <div class="drop-s">CSV, XLSX, XLS &nbsp;·&nbsp; Maks 200 MB<br>Pastikan ada kolom <em>nama</em> dan <em>email</em></div>
     </div>
     <div style="margin-top:12px">
       <div class="slbl">Riwayat upload kontak</div>
       <div class="g card">
-        <div class="cr"><div class="cr-main"><div class="cr-t">data-pelanggan-mei.xlsx</div><div class="cr-s">5 Jun 2025 &middot; 18.4 KB</div></div><div class="cr-r">1.240 baris<small>Excel</small></div></div>
-        <div class="cr"><div class="cr-main"><div class="cr-t">email-blast-april.csv</div><div class="cr-s">28 Apr 2025 &middot; 8.1 KB</div></div><div class="cr-r">640 baris<small>CSV</small></div></div>
-        <div class="cr"><div class="cr-main"><div class="cr-t">kontak-toko-maret.xlsx</div><div class="cr-s">12 Mar 2025 &middot; 22.7 KB</div></div><div class="cr-r">1.890 baris<small>Excel</small></div></div>
+        <div class="cr"><div class="cr-main"><div class="cr-t">data-pelanggan-mei.xlsx</div><div class="cr-s">5 Jun 2025 · 18.4 KB</div></div><div class="cr-r">1.240 baris<small>Excel</small></div></div>
+        <div class="cr"><div class="cr-main"><div class="cr-t">email-blast-april.csv</div><div class="cr-s">28 Apr 2025 · 8.1 KB</div></div><div class="cr-r">640 baris<small>CSV</small></div></div>
+        <div class="cr"><div class="cr-main"><div class="cr-t">kontak-toko-maret.xlsx</div><div class="cr-s">12 Mar 2025 · 22.7 KB</div></div><div class="cr-r">1.890 baris<small>Excel</small></div></div>
       </div>
     </div>
   </div>
@@ -636,14 +774,14 @@ select.inp{cursor:pointer;-webkit-appearance:none;appearance:none}
       ondrop="onDrop(event,'template')">
       <input type="file" id="fi2" accept=".txt,.html,.docx" hidden onchange="onFile(event,'template')"/>
       <div class="drop-t">Pilih atau seret file template pesan</div>
-      <div class="drop-s">TXT, HTML, DOCX &nbsp;&middot;&nbsp; Maks 10 MB</div>
+      <div class="drop-s">TXT, HTML, DOCX &nbsp;·&nbsp; Maks 10 MB</div>
     </div>
     <div style="margin-top:12px">
-      <div class="slbl">Template tersedia</div>
-      <div class="g card">
-        <div class="cr"><div class="cr-main"><div class="cr-t">Promo Ramadhan 2025</div><div class="cr-s">1 Jun 2025 &middot; promo.txt</div></div><div class="cr-r"><small>Promo</small></div></div>
-        <div class="cr"><div class="cr-main"><div class="cr-t">Newsletter Bulanan</div><div class="cr-s">15 Mei 2025 &middot; newsletter.html</div></div><div class="cr-r"><small>Newsletter</small></div></div>
-        <div class="cr"><div class="cr-main"><div class="cr-t">Undangan Webinar</div><div class="cr-s">2 Mei 2025 &middot; undangan.txt</div></div><div class="cr-r"><small>Undangan</small></div></div>
+      <div class="slbl" id="templateListLabel">Template tersedia</div>
+      <div class="g card" id="templateListCard">
+        <div class="cr"><div class="cr-main"><div class="cr-t">Promo Ramadhan 2025</div><div class="cr-s">1 Jun 2025 · promo.txt</div></div><div class="cr-r"><small>Promo</small></div></div>
+        <div class="cr"><div class="cr-main"><div class="cr-t">Newsletter Bulanan</div><div class="cr-s">15 Mei 2025 · newsletter.html</div></div><div class="cr-r"><small>Newsletter</small></div></div>
+        <div class="cr"><div class="cr-main"><div class="cr-t">Undangan Webinar</div><div class="cr-s">2 Mei 2025 · undangan.txt</div></div><div class="cr-r"><small>Undangan</small></div></div>
       </div>
     </div>
   </div>
@@ -657,6 +795,13 @@ select.inp{cursor:pointer;-webkit-appearance:none;appearance:none}
     <div class="pt"><span>Broadcast</span> Email</div>
     <div class="ps">Kirim email massal ke daftar kontak</div>
   </div>
+
+  <!-- Pilih akun pengirim -->
+  <div>
+    <div class="slbl">Akun pengirim aktif</div>
+    <div class="broadcast-akun-row" id="bcAkunRow"></div>
+  </div>
+
   <div class="g compose">
     <div class="finp">
       <label class="flbl">Data penerima</label>
@@ -681,16 +826,30 @@ select.inp{cursor:pointer;-webkit-appearance:none;appearance:none}
       </select>
     </div>
     <div class="finp">
+      <label class="flbl">Interval pengiriman</label>
+      <div class="interval-grid">
+        <button class="interval-btn" onclick="pilihIntervalBC(this,'3')">3 mnt</button>
+        <button class="interval-btn" onclick="pilihIntervalBC(this,'5')">5 mnt</button>
+        <button class="interval-btn on" onclick="pilihIntervalBC(this,'7')">7 mnt</button>
+        <button class="interval-btn" onclick="pilihIntervalBC(this,'10')">10 mnt</button>
+        <button class="interval-btn" onclick="pilihIntervalBC(this,'12')">12 mnt</button>
+        <button class="interval-btn" onclick="pilihIntervalBC(this,'15')">15 mnt</button>
+        <button class="interval-btn" onclick="pilihIntervalBC(this,'20')">20 mnt</button>
+        <button class="interval-btn" onclick="pilihIntervalBC(this,'30')">30 mnt</button>
+      </div>
+    </div>
+    <div class="finp">
       <label class="flbl">Isi pesan</label>
       <textarea class="inp" id="emailbody" placeholder="Isi pesan otomatis terisi jika template dipilih..."></textarea>
     </div>
     <button class="btn btn-dark" onclick="sendBC()">Genjod Sekarang</button>
   </div>
+
   <div>
     <div class="slbl">Riwayat broadcast</div>
-    <div class="g card">
-      <div class="cr"><div class="cr-main"><div class="cr-t">Promo Ramadhan 2025</div><div class="cr-s">500 penerima &middot; 6 Jun 2025</div></div><div class="cr-r">498 sukses<small>99.6%</small></div></div>
-      <div class="cr"><div class="cr-main"><div class="cr-t">Newsletter Mei</div><div class="cr-s">640 penerima &middot; 1 Jun 2025</div></div><div class="cr-r">637 sukses<small>99.5%</small></div></div>
+    <div class="g card" id="bcHistory">
+      <div class="cr"><div class="cr-main"><div class="cr-t">Promo Ramadhan 2025</div><div class="cr-s">500 penerima · 6 Jun 2025 · Akun Utama</div></div><div class="cr-r">498 sukses<small>99.6%</small></div></div>
+      <div class="cr"><div class="cr-main"><div class="cr-t">Newsletter Mei</div><div class="cr-s">640 penerima · 1 Jun 2025 · Akun Promosi</div></div><div class="cr-r">637 sukses<small>99.5%</small></div></div>
     </div>
   </div>
 </div>
@@ -712,9 +871,8 @@ select.inp{cursor:pointer;-webkit-appearance:none;appearance:none}
         <div>
           <div class="plan-n">Free</div>
           <div class="plan-price" style="font-size:16px;font-weight:400">Gratis</div>
-          <div class="plan-dur">Berlaku 1 hari &middot; Pengguna pertama</div>
         </div>
-        <span class="pill pill-dim" style="margin-top:2px">1 hari</span>
+        <span class="pill pill-dim">Pengguna baru</span>
       </div>
       <div class="plan-fs">
         <div class="plan-f">100 email / hari</div>
@@ -733,10 +891,10 @@ select.inp{cursor:pointer;-webkit-appearance:none;appearance:none}
       <div class="plan" id="plan-cool" onclick="pickPlan(this,'WETAN COOL')">
         <div class="plan-n">WETAN COOL</div>
         <div class="plan-price">Rp 5k</div>
-        <div class="plan-dur">3 hari &middot; 150 email/hari</div>
         <div class="plan-fs">
+          <div class="plan-f">150 email/hari</div>
           <div class="plan-f">Total 450 email</div>
-          <div class="plan-f">Kecepatan pengiriman</div>
+          <div class="plan-f">Interval pengiriman</div>
         </div>
         <div class="speed-row" onclick="event.stopPropagation()">
           <button class="speed-btn on" onclick="selSpeed(this,'cool','7')">7 mnt</button>
@@ -750,8 +908,8 @@ select.inp{cursor:pointer;-webkit-appearance:none;appearance:none}
       <div class="plan" id="plan-banti" onclick="pickPlan(this,'WETAN BANTI')">
         <div class="plan-n">WETAN BANTI</div>
         <div class="plan-price">Rp 15k</div>
-        <div class="plan-dur">3 hari &middot; 250 email/hari</div>
         <div class="plan-fs">
+          <div class="plan-f">250 email/hari</div>
           <div class="plan-f">Total 750 email</div>
           <div class="plan-f">50 MB storage</div>
         </div>
@@ -768,10 +926,10 @@ select.inp{cursor:pointer;-webkit-appearance:none;appearance:none}
         <span class="plan-tag">Terbaik</span>
         <div class="plan-n">WETAN BERISIK</div>
         <div class="plan-price">Rp 25k</div>
-        <div class="plan-dur">3 hari &middot; 500 email/hari</div>
         <div class="plan-fs" style="display:grid;grid-template-columns:1fr 1fr;gap:3px 12px">
-          <div class="plan-f">Total 1.500 email</div>
+          <div class="plan-f">500 email/hari</div>
           <div class="plan-f">Unlimited upload</div>
+          <div class="plan-f">Total 1.500 email</div>
           <div class="plan-f">Pengiriman tercepat</div>
         </div>
         <div class="speed-row" onclick="event.stopPropagation()">
@@ -785,17 +943,51 @@ select.inp{cursor:pointer;-webkit-appearance:none;appearance:none}
     </div>
   </div>
 
-  <!-- TOMBOL BELI -->
-  <button class="btn btn-dark" onclick="openOverlay('overlayBayar')" style="margin-top:4px">
-    🛒 Beli Paket Wetan
+  <!-- TOMBOL BELI — disabled sampai paket dipilih -->
+  <button class="btn btn-dark" id="btnBeli" onclick="bukaPayment()" disabled style="margin-top:4px">
+    🛒 Pilih Paket Terlebih Dahulu
   </button>
 
   <div>
     <div class="slbl">Riwayat transaksi</div>
     <div class="g card">
       <div class="cr">
-        <div class="cr-main"><div class="cr-t">WETAN BERISIK</div><div class="cr-s">1 Jun 2025 &middot; 3 hari</div></div>
+        <div class="cr-main"><div class="cr-t">WETAN BERISIK</div><div class="cr-s">1 Jun 2025 · 3 hari</div></div>
         <span class="pill pill-blue">aktif</span>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ── MULTI AKUN ── -->
+<section class="view" id="v-akun">
+<div class="pg">
+  <div style="padding:4px 2px 8px">
+    <div class="pt">Multi <span>Akun</span></div>
+    <div class="ps">Kelola beberapa akun email pengirim dari satu dashboard</div>
+  </div>
+
+  <div>
+    <div class="akun-header">
+      <div class="slbl" style="margin:0">Akun email pengirim</div>
+      <button class="akun-btn primary" onclick="openOverlay('overlayTambahAkun')">+ Tambah</button>
+    </div>
+    <div class="akun-list" id="akunList"></div>
+  </div>
+
+  <div class="g" style="padding:16px 18px">
+    <div style="font-size:12px;color:var(--t2);font-weight:300;line-height:1.7">
+      <span style="font-size:13px;font-weight:400;color:var(--text);display:block;margin-bottom:4px">💡 Cara kerja Multi Akun</span>
+      Setiap akun email memiliki template, daftar penerima, dan riwayat broadcast yang terpisah. Beberapa akun dapat menjalankan broadcast secara bersamaan tanpa saling mengganggu.
+    </div>
+  </div>
+
+  <div>
+    <div class="slbl">Status broadcast berjalan</div>
+    <div class="g card" id="runningBroadcasts">
+      <div class="cr" style="justify-content:center;padding:20px">
+        <span style="font-size:12px;color:var(--t3)">Belum ada broadcast aktif</span>
       </div>
     </div>
   </div>
@@ -830,7 +1022,11 @@ select.inp{cursor:pointer;-webkit-appearance:none;appearance:none}
         <span class="srow-r">›</span>
       </div>
       <div class="srow" onclick="nav('sub')">
-        <div class="srow-body"><div class="srow-t">Paket saya</div><div class="srow-s">WETAN BERISIK &middot; Aktif 3 hari</div></div>
+        <div class="srow-body"><div class="srow-t">Paket saya</div><div class="srow-s">WETAN BERISIK · Aktif 3 hari</div></div>
+        <span class="srow-r">›</span>
+      </div>
+      <div class="srow" onclick="nav('akun')">
+        <div class="srow-body"><div class="srow-t">Multi Akun</div><div class="srow-s" id="multiAkunCount">Kelola akun email pengirim</div></div>
         <span class="srow-r">›</span>
       </div>
     </div>
@@ -851,8 +1047,8 @@ select.inp{cursor:pointer;-webkit-appearance:none;appearance:none}
         <div class="srow-body"><div class="srow-t">Bantuan</div><div class="srow-s">FAQ dan kontak tim</div></div>
         <span class="srow-r">›</span>
       </div>
-      <div class="srow" onclick="toast('WETAN MPTB v2.0.0')">
-        <div class="srow-body"><div class="srow-t">Tentang</div><div class="srow-s">v2.0.0</div></div>
+      <div class="srow" onclick="toast('WETAN MPTB v2.1.0')">
+        <div class="srow-body"><div class="srow-t">Tentang</div><div class="srow-s">v2.1.0</div></div>
         <span class="srow-r">›</span>
       </div>
       <div class="srow red" onclick="doLogout()">
@@ -865,31 +1061,36 @@ select.inp{cursor:pointer;-webkit-appearance:none;appearance:none}
 </div>
 </section>
 
-<!-- ── DYNAMIC ISLAND ── -->
+<!-- ── DYNAMIC ISLAND — LEBIH BESAR ── -->
 <div class="di-wrap">
   <div class="di" id="di">
     <div class="di-item on" id="n-dash" onclick="nav('dash')">
-      <div class="di-dot"></div>
+      <div class="di-icon">🏠</div>
       <span class="di-lbl">Beranda</span>
     </div>
     <div class="di-sep"></div>
     <div class="di-item" id="n-upload" onclick="nav('upload')">
-      <div class="di-dot"></div>
+      <div class="di-icon">📂</div>
       <span class="di-lbl">Upload</span>
     </div>
     <div class="di-sep"></div>
     <div class="di-item" id="n-broadcast" onclick="nav('broadcast')">
-      <div class="di-dot"></div>
+      <div class="di-icon">📡</div>
       <span class="di-lbl">Broadcast</span>
     </div>
     <div class="di-sep"></div>
+    <div class="di-item" id="n-akun" onclick="nav('akun')">
+      <div class="di-icon">👥</div>
+      <span class="di-lbl">Multi Akun</span>
+    </div>
+    <div class="di-sep"></div>
     <div class="di-item" id="n-sub" onclick="nav('sub')">
-      <div class="di-dot"></div>
+      <div class="di-icon">💎</div>
       <span class="di-lbl">Paket</span>
     </div>
     <div class="di-sep"></div>
     <div class="di-item" id="n-set" onclick="nav('set')">
-      <div class="di-dot"></div>
+      <div class="di-icon">⚙️</div>
       <span class="di-lbl">Setelan</span>
     </div>
   </div>
@@ -899,8 +1100,6 @@ select.inp{cursor:pointer;-webkit-appearance:none;appearance:none}
 
 <script>
 // ── LOADING ──
-// Catatan: loadscreen kini disembunyikan oleh guardSession() setelah sesi
-// terverifikasi (lihat blok Supabase di bawah), bukan oleh timer tetap.
 window.addEventListener('load',()=>{
   setTimeout(()=>{const b=document.getElementById('qbar');if(b)b.style.width='64%';},700);
 });
@@ -926,9 +1125,15 @@ function toggleTheme(){
   document.getElementById('dmtog').classList.toggle('on',dark);
 }
 
-// ── OVERLAY ──
-function openOverlay(id){document.getElementById(id).classList.add('show')}
-function closeOverlay(id){document.getElementById(id).classList.remove('show')}
+// ── OVERLAY — dengan blur background ── 
+function openOverlay(id){
+  document.getElementById(id).classList.add('show');
+  document.body.style.overflow='hidden';
+}
+function closeOverlay(id){
+  document.getElementById(id).classList.remove('show');
+  document.body.style.overflow='';
+}
 document.querySelectorAll('.overlay').forEach(o=>{
   o.addEventListener('click',function(e){if(e.target===this)closeOverlay(this.id)});
 });
@@ -952,10 +1157,20 @@ function switchTab(t){
   const bt=document.getElementById('tab-template');
   bk.style.background=k?'var(--text)':'transparent';bk.style.color=k?'var(--bg)':'var(--t2)';
   bt.style.background=k?'transparent':'var(--text)';bt.style.color=k?'var(--t2)':'var(--bg)';
+  if(!k) renderTemplateList();
 }
 function onFile(e,type){
   const f=e.target.files[0];if(!f)return;
-  toast('"'+f.name+'" berhasil diupload sebagai '+(type==='kontak'?'daftar kontak':'template pesan'));
+  const activeAkun=getActiveUploadAkun();
+  if(type==='template' && activeAkun){
+    // simpan template ke akun yang dipilih
+    if(!akunTemplates[activeAkun.id]) akunTemplates[activeAkun.id]=[];
+    akunTemplates[activeAkun.id].push({name:f.name,date:'Baru saja',type:f.name.split('.').pop().toUpperCase()});
+    renderTemplateList();
+    toast('"'+f.name+'" ditambahkan ke template '+activeAkun.nama);
+  } else {
+    toast('"'+f.name+'" berhasil diupload sebagai '+(type==='kontak'?'daftar kontak':'template pesan'));
+  }
 }
 function onDrop(e,type){
   e.preventDefault();
@@ -976,6 +1191,24 @@ function applyTemplate(){
   document.getElementById('emailbody').value=v&&tpls[v]?tpls[v]:'';
 }
 
+// ── INTERVAL BROADCAST (halaman broadcast utama) ──
+let selectedIntervalBC='7';
+function pilihIntervalBC(btn,val){
+  const grid=btn.closest('.interval-grid');
+  grid.querySelectorAll('.interval-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  selectedIntervalBC=val;
+}
+
+// ── INTERVAL di popup akun ──
+let selectedIntervalAkun='7';
+function pilihInterval(btn,val){
+  const grid=btn.closest('.interval-grid');
+  grid.querySelectorAll('.interval-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  selectedIntervalAkun=val;
+}
+
 // ── BROADCAST ──
 const contacts={
   '1240':['Andi Prasetyo','Siti Rahayu','Budi Kurniawan','Dewi Lestari','Eko Santoso','Fitri Handayani','Galih Nugroho','Heni Wulandari','Irwan Setiawan','Joko Susilo','...dan 1.230 lainnya'],
@@ -987,10 +1220,12 @@ function sendBC(){
   const count=selEl.value;
   const lbl=selEl.options[selEl.selectedIndex].text.split('—')[0].trim();
   const names=contacts[count]||[];
-  toast('Mengirim...');
+  const activeAkun=getActiveBCakun();
+  const akunLabel=activeAkun?activeAkun.nama:'Akun Utama';
+  toast('Mengirim dari '+akunLabel+'… interval '+selectedIntervalBC+' mnt');
   setTimeout(()=>{
     document.getElementById('popupSub').innerHTML=
-      'Pesan berhasil dikirim ke <strong>'+parseInt(count).toLocaleString('id-ID')+'</strong> kontak dari <em>'+lbl+'</em>.';
+      'Pesan berhasil dikirim ke <strong>'+parseInt(count).toLocaleString('id-ID')+'</strong> kontak dari <em>'+lbl+'</em> menggunakan <em>'+akunLabel+'</em>.';
     const nl=document.getElementById('popupNames');
     nl.innerHTML='';
     names.forEach(n=>{
@@ -1000,16 +1235,21 @@ function sendBC(){
       nl.appendChild(d);
     });
     openOverlay('overlaySuccess');
+    if(activeAkun){
+      addRunningBroadcast(activeAkun,count,selectedIntervalBC);
+    }
   },1800);
 }
 
-// ── PLANS ──
+// ── PLANS — tombol beli aktif hanya jika paket dipilih ──
+let selectedPlan=null;
 function pickPlan(el,n){
-  document.querySelectorAll('.plan').forEach(p=>{
-    p.classList.remove('on');
-    const t=p.querySelector('.plan-tag');if(t&&t.textContent==='dipilih')t.remove();
-  });
+  document.querySelectorAll('.plan').forEach(p=>p.classList.remove('on'));
   el.classList.add('on');
+  selectedPlan=n;
+  const btn=document.getElementById('btnBeli');
+  btn.disabled=false;
+  btn.textContent='🛒 Beli Paket '+n;
   toast('Paket '+n+' dipilih');
 }
 function selSpeed(btn,plan,val){
@@ -1017,6 +1257,11 @@ function selSpeed(btn,plan,val){
   row.querySelectorAll('.speed-btn').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
   toast('Interval '+val+' menit dipilih untuk paket tersebut');
+}
+function bukaPayment(){
+  if(!selectedPlan){toast('Pilih paket terlebih dahulu');return;}
+  document.getElementById('payPopupSub').textContent='Paket: '+selectedPlan+' — selesaikan pembayaran sesuai bank pilihan Anda';
+  openOverlay('overlayBayar');
 }
 
 // ── BANK SELECTOR ──
@@ -1032,35 +1277,21 @@ async function saveProfile(){
   const btn=document.querySelector('#overlayEdit .btn-dark');
   const original=btn.textContent;
   btn.textContent='Menyimpan…';btn.disabled=true;
-
   try{
     if(window.sb){
       const updates={data:{full_name:nama}};
-      // Ganti email lewat Supabase memerlukan verifikasi ulang via email
-      if(email && window.currentUser && email!==window.currentUser.email){
-        updates.email=email;
-      }
+      if(email && window.currentUser && email!==window.currentUser.email) updates.email=email;
       const {data,error}=await window.sb.auth.updateUser(updates);
-      if(error){
-        toast(error.message,true);
-        btn.textContent=original;btn.disabled=false;
-        return;
-      }
-      if(updates.email){
-        toast('Profil disimpan. Periksa email baru untuk verifikasi.');
-      }else{
-        toast('Profil berhasil diperbarui');
-      }
-    }else{
+      if(error){toast(error.message);btn.textContent=original;btn.disabled=false;return;}
+      if(updates.email) toast('Profil disimpan. Periksa email baru untuk verifikasi.');
+      else toast('Profil berhasil diperbarui');
+    } else {
       toast('Profil berhasil diperbarui');
     }
   }catch(err){
-    console.error(err);
-    toast('Gagal menyimpan profil',true);
-    btn.textContent=original;btn.disabled=false;
-    return;
+    console.error(err);toast('Gagal menyimpan profil');
+    btn.textContent=original;btn.disabled=false;return;
   }
-
   document.getElementById('mainName').textContent=nama;
   document.getElementById('greetName').textContent=nama.split(' ')[0];
   document.getElementById('mainAv').textContent=nama.charAt(0).toUpperCase();
@@ -1068,6 +1299,199 @@ async function saveProfile(){
   btn.textContent=original;btn.disabled=false;
   closeOverlay('overlayEdit');
 }
+
+// ══════════════════════════════════════════════════
+// ── MULTI AKUN SYSTEM ──
+// ══════════════════════════════════════════════════
+let akunList = [
+  { id:'akun-1', nama:'Akun Utama', email:'utama@wetanmptb.com', sender:'Tim WETAN MPTB', active:true },
+  { id:'akun-2', nama:'Akun Promosi', email:'promo@wetanmptb.com', sender:'Promo WETAN', active:false },
+];
+// Template per akun (terpisah)
+let akunTemplates = {
+  'akun-1': [
+    {name:'Promo Ramadhan 2025', date:'1 Jun 2025', type:'TXT'},
+    {name:'Newsletter Bulanan', date:'15 Mei 2025', type:'HTML'},
+  ],
+  'akun-2': [
+    {name:'Undangan Webinar', date:'2 Mei 2025', type:'TXT'},
+  ]
+};
+// Broadcast yang sedang berjalan
+let runningBroadcasts = [];
+// Akun yang sedang dipilih di broadcast & upload
+let activeBCakunId = 'akun-1';
+let activeUploadAkunId = 'akun-1';
+let currentBCakunId = null; // untuk popup
+
+function getActiveBCakun(){ return akunList.find(a=>a.id===activeBCakunId)||akunList[0]; }
+function getActiveUploadAkun(){ return akunList.find(a=>a.id===activeUploadAkunId)||akunList[0]; }
+
+function renderAkunList(){
+  const el=document.getElementById('akunList');
+  el.innerHTML='';
+  akunList.forEach(akun=>{
+    const running=runningBroadcasts.find(r=>r.akunId===akun.id);
+    el.innerHTML+=`
+      <div class="akun-card ${activeBCakunId===akun.id?'active-account':''}">
+        <div class="akun-av">${akun.nama.charAt(0).toUpperCase()}</div>
+        <div class="akun-info">
+          <div class="akun-name">${akun.nama}</div>
+          <div class="akun-email">${akun.email}</div>
+          ${running?`<div style="margin-top:4px"><span class="running-badge">Broadcast berjalan · setiap ${running.interval} mnt</span></div>`:''}
+        </div>
+        <div class="akun-actions">
+          <button class="akun-btn" onclick="bukaBroadcastAkun('${akun.id}')">Broadcast</button>
+          <button class="akun-btn danger" onclick="hapusAkun('${akun.id}')">Hapus</button>
+        </div>
+      </div>`;
+  });
+  // update count di setelan
+  const countEl=document.getElementById('multiAkunCount');
+  if(countEl) countEl.textContent=akunList.length+' akun email terdaftar';
+
+  renderBCAkunRow();
+  renderUploadAkunRow();
+  renderRunningBroadcastsList();
+}
+
+function renderBCAkunRow(){
+  const row=document.getElementById('bcAkunRow');
+  if(!row) return;
+  row.innerHTML='';
+  akunList.forEach(akun=>{
+    const btn=document.createElement('button');
+    btn.className='broadcast-akun-btn'+(activeBCakunId===akun.id?' active':'');
+    btn.innerHTML=`<span class="status-dot"></span>${akun.nama}`;
+    btn.onclick=()=>{activeBCakunId=akun.id;renderBCAkunRow();toast('Pengirim: '+akun.nama+' <'+akun.email+'>');}
+    row.appendChild(btn);
+  });
+}
+
+function renderUploadAkunRow(){
+  const row=document.getElementById('uploadAkunRow');
+  if(!row) return;
+  row.innerHTML='';
+  akunList.forEach(akun=>{
+    const btn=document.createElement('button');
+    btn.className='broadcast-akun-btn'+(activeUploadAkunId===akun.id?' active':'');
+    btn.innerHTML=`<span class="status-dot"></span>${akun.nama}`;
+    btn.onclick=()=>{activeUploadAkunId=akun.id;renderUploadAkunRow();renderTemplateList();toast('Upload ke: '+akun.nama);}
+    row.appendChild(btn);
+  });
+}
+
+function renderTemplateList(){
+  const card=document.getElementById('templateListCard');
+  const lbl=document.getElementById('templateListLabel');
+  if(!card) return;
+  const akun=getActiveUploadAkun();
+  if(lbl) lbl.textContent='Template — '+akun.nama;
+  const list=akunTemplates[akun.id]||[];
+  if(!list.length){
+    card.innerHTML='<div class="cr" style="justify-content:center;padding:20px"><span style="font-size:12px;color:var(--t3)">Belum ada template untuk akun ini</span></div>';
+    return;
+  }
+  card.innerHTML=list.map(t=>`
+    <div class="cr"><div class="cr-main"><div class="cr-t">${t.name}</div><div class="cr-s">${t.date}</div></div><div class="cr-r"><small>${t.type}</small></div></div>
+  `).join('');
+}
+
+function renderRunningBroadcastsList(){
+  const el=document.getElementById('runningBroadcasts');
+  if(!el) return;
+  if(!runningBroadcasts.length){
+    el.innerHTML='<div class="cr" style="justify-content:center;padding:20px"><span style="font-size:12px;color:var(--t3)">Belum ada broadcast aktif</span></div>';
+    return;
+  }
+  el.innerHTML=runningBroadcasts.map(r=>`
+    <div class="cr">
+      <div class="cr-main">
+        <div class="cr-t">${r.akunNama}</div>
+        <div class="cr-s">${r.akunEmail} · interval ${r.interval} mnt · ${r.penerima} kontak</div>
+      </div>
+      <span class="running-badge">Aktif</span>
+    </div>
+  `).join('');
+}
+
+function addRunningBroadcast(akun,jumlahPenerima,interval){
+  // hapus broadcast lama akun yang sama jika ada
+  runningBroadcasts=runningBroadcasts.filter(r=>r.akunId!==akun.id);
+  runningBroadcasts.push({
+    akunId:akun.id,
+    akunNama:akun.nama,
+    akunEmail:akun.email,
+    interval:interval,
+    penerima:parseInt(jumlahPenerima).toLocaleString('id-ID')
+  });
+  renderAkunList();
+}
+
+function bukaBroadcastAkun(akunId){
+  const akun=akunList.find(a=>a.id===akunId);
+  if(!akun) return;
+  currentBCakunId=akunId;
+  document.getElementById('bcAkunTitle').textContent='Broadcast — '+akun.nama;
+  document.getElementById('bcAkunSub').textContent=akun.email+' · '+akun.sender;
+  // isi template dari akun tersebut
+  const sel=document.getElementById('bcAkunTemplate');
+  sel.innerHTML='<option value="">Pilih template...</option>';
+  const list=akunTemplates[akunId]||[];
+  list.forEach(t=>{
+    const opt=document.createElement('option');
+    opt.value=t.name;opt.textContent=t.name;
+    sel.appendChild(opt);
+  });
+  // reset interval ke default
+  document.querySelectorAll('#bcIntervalGrid .interval-btn').forEach(b=>b.classList.remove('on'));
+  const def=document.querySelector('#bcIntervalGrid .interval-btn[onclick*="\'7\'"]');
+  if(def) def.classList.add('on');
+  selectedIntervalAkun='7';
+  openOverlay('overlayBroadcastAkun');
+}
+
+function mulaibroadcastAkun(){
+  const akun=akunList.find(a=>a.id===currentBCakunId);
+  if(!akun) return;
+  const template=document.getElementById('bcAkunTemplate').value;
+  const penerima=document.getElementById('bcAkunPenerima').value;
+  const interval=selectedIntervalAkun;
+  closeOverlay('overlayBroadcastAkun');
+  toast('🚀 Broadcast dimulai dari '+akun.nama+' · interval '+interval+' mnt');
+  addRunningBroadcast(akun,penerima,interval);
+}
+
+function simpanAkun(){
+  const nama=document.getElementById('newAkunNama').value.trim();
+  const email=document.getElementById('newAkunEmail').value.trim();
+  const sender=document.getElementById('newAkunSender').value.trim();
+  if(!nama||!email){toast('Nama dan email wajib diisi');return;}
+  const id='akun-'+(Date.now());
+  akunList.push({id,nama,email,sender:sender||nama,active:false});
+  akunTemplates[id]=[];
+  document.getElementById('newAkunNama').value='';
+  document.getElementById('newAkunEmail').value='';
+  document.getElementById('newAkunSender').value='';
+  closeOverlay('overlayTambahAkun');
+  renderAkunList();
+  toast('Akun "'+nama+'" berhasil ditambahkan');
+}
+
+function hapusAkun(id){
+  if(akunList.length<=1){toast('Minimal harus ada 1 akun');return;}
+  const akun=akunList.find(a=>a.id===id);
+  akunList=akunList.filter(a=>a.id!==id);
+  runningBroadcasts=runningBroadcasts.filter(r=>r.akunId!==id);
+  delete akunTemplates[id];
+  if(activeBCakunId===id) activeBCakunId=akunList[0].id;
+  if(activeUploadAkunId===id) activeUploadAkunId=akunList[0].id;
+  renderAkunList();
+  if(akun) toast('Akun "'+akun.nama+'" dihapus');
+}
+
+// Init multi akun
+renderAkunList();
 </script>
 <!-- SUPABASE CONNECTOR -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -1081,84 +1505,50 @@ async function saveProfile(){
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   window.sb = sb;
 
-  // Halaman tujuan jika belum login
   const LOGIN_PAGE = 'index.html';
 
   async function guardSession(){
     try{
       const { data:{session} } = await sb.auth.getSession();
-
-      if(!session){
-        console.log("ℹ️ Belum login, mengalihkan ke halaman login");
-        window.location.href = LOGIN_PAGE;
-        return;
-      }
-
+      if(!session){ window.location.href = LOGIN_PAGE; return; }
       console.log("✅ Login sebagai:", session.user.email);
       window.currentUser = session.user;
       applyUserToUI(session.user);
       await loadProfile();
-
-      // Sembunyikan loading screen setelah sesi terverifikasi
       const ls = document.getElementById('loadscreen');
-      if(ls){
-        setTimeout(()=>{
-          ls.classList.add('hide');
-          setTimeout(()=>ls.remove(),600);
-        },400);
-      }
-
+      if(ls){ setTimeout(()=>{ ls.classList.add('hide'); setTimeout(()=>ls.remove(),600); },400); }
     }catch(err){
       console.error("❌ Supabase Error:", err);
       window.location.href = LOGIN_PAGE;
     }
   }
 
-  // Isi nama & email ke UI berdasarkan data user yang login
   function applyUserToUI(user){
     const meta = user.user_metadata || {};
     const nama = meta.full_name || (user.email ? user.email.split('@')[0] : 'Pengguna');
     const email = user.email || '';
     const initial = nama.charAt(0).toUpperCase();
-
     const set = (id, val) => { const el = document.getElementById(id); if(el) el.textContent = val; };
-    set('mainName', nama);
-    set('mainEmail', email);
+    set('mainName', nama); set('mainEmail', email);
     set('greetName', nama.split(' ')[0]);
-    set('mainAv', initial);
-    set('editAvPreview', initial);
-
+    set('mainAv', initial); set('editAvPreview', initial);
     const editNama = document.getElementById('editNama');
     const editEmail = document.getElementById('editEmail');
     if(editNama) editNama.value = nama;
     if(editEmail) editEmail.value = email;
   }
 
-  // ── LOAD PROFILE ──
-  // Mengambil data profil dari tabel 'profiles' Supabase,
-  // termasuk userPlan dan userQuota untuk ditampilkan secara dinamis.
   async function loadProfile(){
     const { data:{ user } } = await sb.auth.getUser();
     if(!user) return;
-
-    const { data, error } = await sb
-      .from('profiles')
-      .select('*')
-      .eq('id', user.id);
-
+    const { data, error } = await sb.from('profiles').select('*').eq('id', user.id);
     if(error){ console.error('PROFILE ERROR', error); return; }
-    if(!data || !data.length){ console.warn('PROFILE NOT FOUND untuk id:', user.id); return; }
-
+    if(!data || !data.length){ console.warn('PROFILE NOT FOUND'); return; }
     const profile = data[0];
-    console.log('PROFILE', profile);
-
-    // Nama & email
     const set = (id, val) => { const el=document.getElementById(id); if(el && val) el.textContent=val; };
-    set('mainName',   profile.nama  || profile.full_name);
-    set('mainEmail',  profile.email);
-    set('greetName', (profile.nama  || profile.full_name || '').split(' ')[0]);
-
-    // userPlan — nama paket aktif (mis. "WETAN BERISIK")
+    set('mainName', profile.nama || profile.full_name);
+    set('mainEmail', profile.email);
+    set('greetName', (profile.nama || profile.full_name || '').split(' ')[0]);
     const userPlan = profile.plan || profile.user_plan || null;
     if(userPlan){
       const planEl = document.querySelector('#v-set .pill-blue');
@@ -1166,46 +1556,31 @@ async function saveProfile(){
       const planRowEl = document.querySelector('#v-set .srow-s');
       if(planRowEl) planRowEl.textContent = userPlan + ' · Aktif';
     }
-
-    // userQuota — sisa kuota harian
-    const userQuota     = profile.quota_used  ?? profile.user_quota  ?? null;
-    const userQuotaMax  = profile.quota_limit ?? profile.quota_max   ?? null;
+    const userQuota = profile.quota_used ?? profile.user_quota ?? null;
+    const userQuotaMax = profile.quota_limit ?? profile.quota_max ?? null;
     if(userQuota !== null && userQuotaMax !== null){
-      const used    = parseInt(userQuota,10);
-      const max     = parseInt(userQuotaMax,10);
-      const sisa    = max - used;
-      const pct     = max > 0 ? Math.round(used/max*100) : 0;
-
-      const qLabelEl = document.querySelector('.qbar-bg ~ span');
-      if(qLabelEl) qLabelEl.textContent = sisa.toLocaleString('id-ID') + ' email tersisa';
-
-      const qRightEl = document.querySelector('.info-card span[style*="color:var(--t2)"] + span');
-      if(qRightEl) qRightEl.textContent = used.toLocaleString('id-ID')+' / '+max.toLocaleString('id-ID');
-
-      const qbar = document.getElementById('qbar');
-      if(qbar) setTimeout(()=>{ qbar.style.width = pct+'%'; }, 700);
+      const used=parseInt(userQuota,10), max=parseInt(userQuotaMax,10);
+      const sisa=max-used, pct=max>0?Math.round(used/max*100):0;
+      const qLabelEl=document.querySelector('.qbar-bg ~ span');
+      if(qLabelEl) qLabelEl.textContent=sisa.toLocaleString('id-ID')+' email tersisa';
+      const qbar=document.getElementById('qbar');
+      if(qbar) setTimeout(()=>{ qbar.style.width=pct+'%'; },700);
     }
   }
 
-  // ── LOGOUT ──
   window.doLogout = async function(){
-    try{ await sb.auth.signOut(); }
-    catch(err){ console.error('❌ Gagal logout:', err); }
+    try{ await sb.auth.signOut(); } catch(err){ console.error('❌ Gagal logout:', err); }
     window.location.href = LOGIN_PAGE;
   };
 
-  // Jalankan pengecekan sesi sesegera mungkin, jangan tunggu window.load
-  // supaya dashboard tidak sempat "berkedip" sebelum redirect.
   guardSession();
 
-  // Jika sesi berubah (mis. token kedaluwarsa / logout di tab lain)
   sb.auth.onAuthStateChange((event, session) => {
-    if(event === 'SIGNED_OUT' || !session){
-      window.location.href = LOGIN_PAGE;
-    }
+    if(event === 'SIGNED_OUT' || !session){ window.location.href = LOGIN_PAGE; }
   });
 
 })();
 </script>
 </body>
 </html>
+HTMLEOF
